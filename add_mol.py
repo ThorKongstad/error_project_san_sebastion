@@ -34,4 +34,4 @@ if __name__ == '__main__':
     parser.add_argument('database', help='name or directory for the database.',)
     args = parser.parse_args()
 
-    main(name=args.smiles_str, functional=args.functional, setup_path=args.setup, db_dir=args.database)
+    main(name=args.smiles_str, functional=args.functional, db_dir=args.database)

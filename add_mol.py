@@ -29,9 +29,10 @@ def main(struc_path: str, name: str, functional: str, db_dir: str,):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument('structure')
     parser.add_argument('smiles_str')
     parser.add_argument('functional', help='str denoting what fucntional to calculate with')
     parser.add_argument('database', help='name or directory for the database.',)
     args = parser.parse_args()
 
-    main(name=args.smiles_str, functional=args.functional, db_dir=args.database)
+    main(struc_path=args.structure, name=args.smiles_str, functional=args.functional, db_dir=args.database)

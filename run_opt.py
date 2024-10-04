@@ -8,7 +8,7 @@ import sys
 import pathlib
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-from scripts_for_molecule_database_calculations import update_db, folder_exist, sanitize
+from error_project_san_sebastion import update_db, folder_exist, sanitize
 
 import ase.db as db
 from ase.calculators.vasp import Vasp

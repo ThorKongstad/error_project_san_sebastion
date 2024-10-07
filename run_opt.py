@@ -49,9 +49,11 @@ def main(db_id: int, db_dir: str):
                 # npar=4,  # number of bands that are treated in parallel, sqrt of n of cores
                 )
 
+    atoms.calc = calc
+
     calc.calculate(atoms)
 
-    if world.rank == 0 and calc.converged: update_db(db_dir, dict(id=db_id, atoms=calc.atoms, energy=calc.results.get('energy'), forces=calc.results.get('forces'), relaxed=True, vibration=False, vib_en=False))
+    if world.rank == 0 and calc.converged: update_db(db_dir, dict(id=db_id, atoms=calc.atoms, relaxed=True, vibration=False, vib_en=False))
 
 
 if __name__ == '__main__':

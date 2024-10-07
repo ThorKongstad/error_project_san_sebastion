@@ -24,7 +24,7 @@ def main(db_id: int, db_dir: str):
         atoms = row.toatoms()
         name = row.get('name')
 
-    parprint(f'outstd of opt calculation for db entry {db_id} with structure: {name} and functional: {functional}')
+    if world.rank == 0: print(f'outstd of opt calculation for db entry {db_id} with structure: {name} and functional: {functional}')
 
     barrier()
 
@@ -53,7 +53,7 @@ def main(db_id: int, db_dir: str):
 
     calc.calculate(atoms)
 
-    if world.rank == 0 and calc.converged: update_db(db_dir, dict(id=db_id, atoms=calc.atoms, relaxed=True, vibration=False, vib_en=False))
+    if world.rank == 0 and calc.converged: update_db(db_dir, dict(id=db_id, atoms=atoms, relaxed=True, vibration=False, vib_en=False))
 
 
 if __name__ == '__main__':

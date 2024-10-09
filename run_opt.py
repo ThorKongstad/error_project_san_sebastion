@@ -1,6 +1,6 @@
 #partition=p_medium
 #nprocshared=8
-#mem=2300MB
+#mem=4000MB
 
 import argparse
 import os
@@ -24,7 +24,14 @@ def main(db_id: int, db_dir: str):
         atoms = row.toatoms()
         name = row.get('name')
 
-    if world.rank == 0: print(f'outstd of opt calculation for db entry {db_id} with structure: {name} and functional: {functional}')
+    parprint(f'outstd of opt calculation for db entry {db_id} with structure: {name} and functional: {functional}')
+
+    if all([
+       name == 'oxygen'
+            ]):
+        spin = 2
+    else:
+        spin = 1
 
     barrier()
 
@@ -35,7 +42,7 @@ def main(db_id: int, db_dir: str):
                 istart=0,  # Wavefunction
                 icharg=2,  # Charge: 1-file 2-atom 10-const
                 # PREC = Normal           # Specifies the "precision"-mode
-                ispin=1,  # Specifies spin polarization (1 no, 2 yes)
+                ispin=spin,  # Specifies spin polarization (1 no, 2 yes)
                 encut=450,  # Energy limit for plane waves in eV (never <300)
                 nelmin=6,  # Minimum number of electronic steps
                 nelm=500,

@@ -16,7 +16,7 @@ def multi_filter_or(row: AtomsRow, funcs: Sequence[Callable[[AtomsRow], bool]]) 
 def multi_filter_and(row: AtomsRow, funcs: Sequence[Callable[[AtomsRow], bool]]) -> bool: return all(func(row) for func in funcs)
 
 
-def main(key: str, python_scribt: str,  db_dir: str, selection_filter: Optional[str] = None, local: bool = False, slurm: str = None):
+def main(key: str, python_scribt: str,  db_dir: str, selection_filter: Optional[str] = None, local: bool = False, slurm: str = None, print_id: bool = False):
     if not os.path.basename(db_dir) in os.listdir(db_path if len(db_path := os.path.dirname(db_dir)) > 0 else '.'): raise FileNotFoundError("Can't find database")
     func_list = []
     if selection_filter is not None:
@@ -37,7 +37,8 @@ def main(key: str, python_scribt: str,  db_dir: str, selection_filter: Optional[
 
     for row in row_iter:
         if local: call(['python', python_scribt, str(row.get("id")), '-db', db_dir])
-        else: call([slurm, python_scribt, str(row.get("id")), '-db', db_dir])
+        elif slurm is not None: call([slurm, python_scribt, str(row.get("id")), '-db', db_dir])
+        if print_id: print(row.get('id'))
 
 
 if __name__ == '__main__':
@@ -46,8 +47,9 @@ if __name__ == '__main__':
     parser.add_argument('python_script')
     parser.add_argument('-db', '--database', help='directory to the database, if not stated will look for molreact.db in pwd.', default='molreact.db')
     parser.add_argument('--filter', '-f', help='current implemented filters are isgga, ismgga and collNotExist="COLLOM" t. a "," denotes an or and "&&" denotes an and')
+    parser.add_argument('-id', '--print_id', action='store_true')
     parser.add_argument('--local', '-local', action='store_true')
     parser.add_argument('-ss', '--submission_script', help='directory to the slurm submission script.',)
     args = parser.parse_args()
 
-    main(key=args.keyword, python_scribt=args.python_script, selection_filter=args.filter, db_dir=args.database, local=args.local, slurm=args.submission_script)
+    main(key=args.keyword, python_scribt=args.python_script, selection_filter=args.filter, db_dir=args.database, local=args.local, slurm=args.submission_script, print_id=args.print_id)

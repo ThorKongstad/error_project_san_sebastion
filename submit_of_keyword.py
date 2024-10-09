@@ -16,7 +16,7 @@ def multi_filter_or(row: AtomsRow, funcs: Sequence[Callable[[AtomsRow], bool]]) 
 def multi_filter_and(row: AtomsRow, funcs: Sequence[Callable[[AtomsRow], bool]]) -> bool: return all(func(row) for func in funcs)
 
 
-def main(key: str, python_scribt: str,  db_dir: str, selection_filter: Optional[str] = None, local: bool = False, slurm: str = '/groups/kemi/thorkong/katla_submission/submit_katla_GP228_static'):
+def main(key: str, python_scribt: str,  db_dir: str, selection_filter: Optional[str] = None, local: bool = False, slurm: str = None):
     if not os.path.basename(db_dir) in os.listdir(db_path if len(db_path := os.path.dirname(db_dir)) > 0 else '.'): raise FileNotFoundError("Can't find database")
     func_list = []
     if selection_filter is not None:

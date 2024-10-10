@@ -12,6 +12,7 @@ from error_project_san_sebastion import update_db, folder_exist, sanitize
 
 import ase.db as db
 from ase.calculators.vasp import Vasp
+from ase.calculators.vasp.create_input import string_keys
 from ase.parallel import parprint, world, barrier
 
 
@@ -26,6 +27,8 @@ def main(db_id: int, db_dir: str):
 
     parprint(f'outstd of opt calculation for db entry {db_id} with structure: {name} and functional: {functional}')
 
+    string_keys.insert('libxc1')
+    string_keys.insert('libxc2')
     Vasp.xc_defaults['n12'] = dict(gga='LIBXC', libxc1='GGA_X_N12', libxc2='GGA_C_N12')
     Vasp.xc_defaults['mn12l'] = dict(metagga='LIBXC', libxc1='MGGA_X_MN12_L', libxc2='MGGA_C_MN12_L')
 

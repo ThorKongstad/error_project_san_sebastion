@@ -27,8 +27,8 @@ def main(db_id: int, db_dir: str):
 
     parprint(f'outstd of opt calculation for db entry {db_id} with structure: {name} and functional: {functional}')
 
-    string_keys.insert('libxc1')
-    string_keys.insert('libxc2')
+    string_keys.insert(-1, 'libxc1')
+    string_keys.insert(-1, 'libxc2')
     Vasp.xc_defaults['n12'] = dict(gga='LIBXC', libxc1='GGA_X_N12', libxc2='GGA_C_N12')
     Vasp.xc_defaults['mn12l'] = dict(metagga='LIBXC', libxc1='MGGA_X_MN12_L', libxc2='MGGA_C_MN12_L')
 

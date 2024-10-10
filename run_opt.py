@@ -1,5 +1,5 @@
 #partition=p_medium
-#nprocshared=8
+#nprocshared=12
 #mem=4000MB
 
 import argparse
@@ -57,7 +57,9 @@ def main(db_id: int, db_dir: str):
                 ediff=0.00001,  # Electronic optimization criteria (energy, eV)
                 ediffg=-0.01,  # Atomic optimization criteria (negative: forces eV/A, positive: energy eV)
                 # npar=4,  # number of bands that are treated in parallel, sqrt of n of cores
-                )
+                lcharg=False,
+                lwave=False,
+    )
 
     atoms.calc = calc
 

@@ -8,6 +8,7 @@ from error_project_san_sebastion import sanitize, folder_exist
 
 from ase.io import read
 import ase.db as db
+from ase import Atoms
 #from ase.data.pubchem import pubchem_atoms_search
 #from ase.build import molecule
 # import numpy as np
@@ -20,12 +21,17 @@ def main(db_id: int, db_dir: str):
     with db.connect(db_dir) as db_obj:
         row = db_obj.get(selection=f'id={db_id}')
         functional = row.get('xc')
-        atoms = row.toatoms()
+        atoms: Atoms = row.toatoms()
         name = row.get('name')
 
-    mofun_atom = mofun.Atoms.from_ase_atoms(atoms)
+    atoms.set_positions(atoms.get_positions(wrap=True, pretty_translation=True))
 
-    print(mofun_atom.groups)
+    mofun_atoms = mofun.Atoms.from_ase_atoms(atoms)
+
+    methyl = mofun.Atoms(elements="CHHH", positions=[(0.867, 1.760, 1.589), (0, 2.36, 1.276), (0.816, 1.646, 2.683), (0.757, 0.758, 1.148)])
+
+    methyl_results = mofun.find_pattern_in_structure(mofun_atoms, methyl)
+    print(methyl_results)
 
 
 if __name__ == '__main__':

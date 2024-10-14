@@ -6,6 +6,7 @@ import argparse
 import os
 import sys
 import pathlib
+from subprocess import call
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 from error_project_san_sebastion import update_db, folder_exist, sanitize
@@ -30,7 +31,12 @@ def main(db_id: int, db_dir: str):
     string_keys.insert(-1, 'libxc1')
     string_keys.insert(-1, 'libxc2')
     Vasp.xc_defaults['n12'] = dict(gga='LIBXC', libxc1='GGA_X_N12', libxc2='GGA_C_N12')
-    Vasp.xc_defaults['mn12l'] = dict(metagga='LIBXC', libxc1='MGGA_X_MN12_L', libxc2='MGGA_C_MN12_L')
+    Vasp.xc_defaults['mn12l'] = dict(metagga='LIBXC', libxc1='MGGA_X_MN12_L', libxc2='MGGA_C_MN12_L', lasph=True)
+
+    Vasp.xc_defaults['tpss'] = dict(metagga='TPSS', lasph=True)#, algo='A')
+    Vasp.xc_defaults['m06l'] = dict(metagga='M06L', lasph=True)#, algo='A')
+
+    if functional in ['tpss', 'm06l']: call(['export', 'VASP_PP_PATH=/home-nas/waaguest/VASP_PP_031024'])
 
     if all([
        name == 'oxygen'

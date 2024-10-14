@@ -36,7 +36,7 @@ def main(db_id: int, db_dir: str):
     Vasp.xc_defaults['tpss'] = dict(metagga='TPSS', lasph=True)#, algo='A')
     Vasp.xc_defaults['m06l'] = dict(metagga='M06L', lasph=True)#, algo='A')
 
-    if functional in ['tpss', 'm06l']: call(['export', 'VASP_PP_PATH=/home-nas/waaguest/VASP_PP_031024'])
+    if functional in ['tpss', 'm06l']: os.environ['VASP_PP_PATH'] = '/home-nas/waaguest/VASP_PP_031024'  #call(['export', 'VASP_PP_PATH=/home-nas/waaguest/VASP_PP_031024'])
 
     if all([
        name == 'oxygen'

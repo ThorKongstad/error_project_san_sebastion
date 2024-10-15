@@ -68,6 +68,7 @@ def main(db_id: int, db_dir: str):
                 # npar=4,  # number of bands that are treated in parallel, sqrt of n of cores
                 lcharg=False,
                 lwave=False,
+                algo='A'
     )
 
     atoms.calc = calc

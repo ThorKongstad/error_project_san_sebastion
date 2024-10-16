@@ -20,7 +20,7 @@ import mofun
 def invert_pos(pos):
     inversion = np.array([[0, 0, -1], [0, -1, 0], [-1, 0, 0]])
 
-    inversion_func = lambda pos: inversion.dot(np.array(pos, ndmin=2).transpose())
+    inversion_func = lambda pos: inversion.dot(np.array(pos, ndmin=2).transpose()).flatten()
     return tuple(map(inversion_func, pos))
 
 
@@ -42,13 +42,13 @@ def count_methyls(atoms: Atoms | mofun.Atoms) -> int:
 
 def count_iso_carbon(atoms: Atoms | mofun.Atoms) -> int:
     mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
-    iso_carbon = mofun.Atoms('CCCH', positions=(pos := [[7.32079917, 1.97808864, 1.09854328],
+    iso_carbon = mofun.Atoms(elements='CCCH', positions=(pos := [[7.32079917, 1.97808864, 1.09854328],
        [7.64738407, 3.3509043 , 1.69764671],
        [5.96657801, 1.4319005 , 1.5814139 ],
        [8.44228529, 0.97911226, 1.40304422],
        [7.25888048, 2.09304343, 0.        ]]))
 
-    iso_carbon_inverted = mofun.Atoms('CCCH', positions=invert_pos(pos))
+    iso_carbon_inverted = mofun.Atoms(elements='CCCH', positions=invert_pos(pos))
 
     iso_carbon_inverted_results = mofun.find_pattern_in_structure(mofun_atoms, iso_carbon_inverted)
     iso_carbon_results = mofun.find_pattern_in_structure(mofun_atoms, iso_carbon)
@@ -57,7 +57,7 @@ def count_iso_carbon(atoms: Atoms | mofun.Atoms) -> int:
 
 def count_neo_carbons(atoms: Atoms | mofun.Atoms) -> int:
     mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
-    neo_carbon = mofun.Atoms('CCCC',positions=(poss := np.array([[17.11237229, 17.11237229, 18.88762771],
+    neo_carbon = mofun.Atoms(elements='CCCC',positions=(poss := np.array([[17.11237229, 17.11237229, 18.88762771],
            [17.11237229, 18.88762771, 17.11237229],
            [18.88762771, 17.11237229, 17.11237229],
            [18., 18., 18.],
@@ -69,7 +69,7 @@ def count_neo_carbons(atoms: Atoms | mofun.Atoms) -> int:
 
 def count_amines(atoms: Atoms | mofun.Atoms) -> int:
     mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
-    amine = mofun.Atoms('CNHH', positions=(poss := np.array([[1.33327003, 19.571581  , 0.],
+    amine = mofun.Atoms(elements='CNHH', positions=(poss := np.array([[1.33327003, 19.571581  , 0.],
                                                              [ 2.552727  ,  0.38599328,  0.        ],
                                                              [ 2.57050018,  0.99844134,  0.8183404 ],
                                                              [ 2.57050018,  0.99844134, 19.1816596 ]])))

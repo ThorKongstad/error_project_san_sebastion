@@ -5,14 +5,26 @@ import pathlib
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 from error_project_san_sebastion import sanitize, folder_exist
+from error_project_san_sebastion.functional_groups import count_methyls, count_amines
 
 from ase.io import read
 import ase.db as db
 from ase import Atoms
+from ase.geometry import find_mic
+#from ase.filters import Filter
 #from ase.data.pubchem import pubchem_atoms_search
 #from ase.build import molecule
-# import numpy as np
+import numpy as np
 import mofun
+
+
+def get_repeated_representation(atoms: Atoms, selection_dis: float = 7) -> Atoms:
+    # a try of repeating the structure and then only taking the atom that apears in the middle of the repeat
+    atoms_repeated = atoms.repeat((2, 2, 2))
+    cell_corner = sum(atoms.cell.array)
+    sphere_filter = lambda atom: np.linalg.norm(np.array(atom.position) - cell_corner) < selection_dis
+    #rep_atoms = Filter(atoms_repeated, mask=list(map(sphere_filter, atoms_repeated)))
+    return atoms_repeated[list(map(sphere_filter, atoms_repeated))]
 
 
 def main(db_id: int, db_dir: str):
@@ -24,14 +36,16 @@ def main(db_id: int, db_dir: str):
         atoms: Atoms = row.toatoms()
         name = row.get('name')
 
-    atoms.set_positions(atoms.get_positions(wrap=True, pretty_translation=True))
+#    atoms.set_positions(atoms.get_positions(wrap=True, pretty_translation=True))
+
+#    repr_atoms = get_repeated_representation(atoms)
+#    assert len(repr_atoms) == len(atoms)
+
+    atoms.set_positions(find_mic(atoms.get_positions(), atoms.cell))
 
     mofun_atoms = mofun.Atoms.from_ase_atoms(atoms)
 
-    methyl = mofun.Atoms(elements="CHHH", positions=[(0.867, 1.760, 1.589), (0, 2.36, 1.276), (0.816, 1.646, 2.683), (0.757, 0.758, 1.148)])
-
-    methyl_results = mofun.find_pattern_in_structure(mofun_atoms, methyl)
-    print(methyl_results)
+    print(f'There are {count_methyls(mofun_atoms)} methylse groups and {count_amines(mofun_atoms)} amines.')
 
 
 if __name__ == '__main__':

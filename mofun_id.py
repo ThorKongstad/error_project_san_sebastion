@@ -41,7 +41,7 @@ def main(db_id: int, db_dir: str):
 #    repr_atoms = get_repeated_representation(atoms)
 #    assert len(repr_atoms) == len(atoms)
 
-    atoms.set_positions(find_mic(atoms.get_positions(), atoms.cell))
+    atoms.set_positions(find_mic(atoms.get_positions(), atoms.cell)[0])
 
     mofun_atoms = mofun.Atoms.from_ase_atoms(atoms)
 

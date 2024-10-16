@@ -18,9 +18,7 @@ import mofun
 
 
 def invert_pos(pos):
-    inversion = np.array([[0, 0, -1],
-                          [0 -1, 0],
-                          [-1, 0, 0]])
+    inversion = np.array([[0, 0, -1], [0, -1, 0], [-1, 0, 0]])
 
     inversion_func = lambda pos: inversion * np.array(pos)
     return tuple(map(inversion_func, pos))

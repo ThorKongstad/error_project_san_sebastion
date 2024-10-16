@@ -31,7 +31,7 @@ def counter(pattern, structure) -> int:
 def count_methyls(atoms: Atoms | mofun.Atoms) -> int:
     mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
     patterns = [
-        mofun.Atoms(elements="CHHH", positions=[(0.867, 1.760, 1.589), (0, 2.36, 1.276), (0.816, 1.646, 2.683),(0.757, 0.758, 1.148)]),
+        mofun.Atoms(elements="CHHH", positions=[[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602], [ 0.63284602, -0.63284602, -0.63284602], [-0.63284602,  0.63284602, -0.63284602]]),
         mofun.Atoms(elements="CCCHH", positions=[(0.867, 1.760, 1.589), (2.184, 2.409, 1.163), (3.417, 1.604, 1.580), (2.252, 3.424, 1.591), (2.193, 2.542, 0.067)]),
         mofun.Atoms(elements="NCCHH", positions=(pos := [(0.867, 1.760, 1.589), (2.184, 2.409, 1.163), (3.417, 1.604, 1.580), (2.252, 3.424, 1.591), (2.193, 2.542, 0.067)])),
         mofun.Atoms(elements="NCCHH", positions=invert_pos(pos))
@@ -74,5 +74,4 @@ def count_amines(atoms: Atoms | mofun.Atoms) -> int:
                                                              [ 2.57050018,  0.99844134,  0.8183404 ],
                                                              [ 2.57050018,  0.99844134, 19.1816596 ]])))
 
-    amine_results = mofun.find_pattern_in_structure(mofun_atoms, amine)
-    return len(amine_results)
+    return counter(amine, mofun_atoms)

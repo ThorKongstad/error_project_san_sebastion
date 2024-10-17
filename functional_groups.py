@@ -48,7 +48,7 @@ def counter(pattern: mofun.Atoms, structure: mofun.Atoms, not_patterns: mofun.At
 def count_methyls(atoms: Atoms | mofun.Atoms) -> int:
     mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
     methyls_count = counter(
-        pattern=(methyl_patt :=mofun.Atoms(elements="CHHH", positions=(methyl_pos := [[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602], [ 0.63284602, -0.63284602, -0.63284602], [-0.63284602,  0.63284602, -0.63284602]]))),
+        pattern=(methyl_patt := mofun.Atoms(elements="CHHH", positions=(methyl_pos := [[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602], [ 0.63284602, -0.63284602, -0.63284602], [-0.63284602,  0.63284602, -0.63284602]]))),
         structure=mofun_atoms,
         atol=0.2
     )
@@ -72,17 +72,17 @@ def count_methyls(atoms: Atoms | mofun.Atoms) -> int:
 
 def count_iso_carbon(atoms: Atoms | mofun.Atoms) -> int:
     mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
-    iso_carbon = mofun.Atoms(elements='CCCH', positions=(pos := [[7.32079917, 1.97808864, 1.09854328],
-       [7.64738407, 3.3509043 , 1.69764671],
-       [5.96657801, 1.4319005 , 1.5814139 ],
-       [8.44228529, 0.97911226, 1.40304422],
-       [7.25888048, 2.09304343, 0.        ]]))
 
-    iso_carbon_inverted = mofun.Atoms(elements='CCCH', positions=invert_pos(pos))
+    alkane_pattern = mofun.Atoms(elements="CHH", positions=[[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602], [ 0.63284602, -0.63284602, -0.63284602]])
 
-    iso_carbon_inverted_results = mofun.find_pattern_in_structure(mofun_atoms, iso_carbon_inverted)
-    iso_carbon_results = mofun.find_pattern_in_structure(mofun_atoms, iso_carbon)
-    return len(iso_carbon_results) + len(iso_carbon_inverted_results)
+    iso_count = counter(
+        pattern=mofun.Atoms(elements="CH", positions=[[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602]]),
+        structure=mofun_atoms,
+        not_patterns=(alkane_pattern,),
+        atol=0.2
+    )
+
+    return iso_count
 
 
 def count_neo_carbons(atoms: Atoms | mofun.Atoms) -> int:

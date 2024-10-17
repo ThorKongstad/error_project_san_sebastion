@@ -2,7 +2,7 @@ import argparse
 import os
 import sys
 import pathlib
-
+from copy import deepcopy as dcp
 import numpy as np
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
@@ -17,22 +17,29 @@ from ase import Atoms
 import mofun
 
 
+def sp(x):
+    print(x)
+    return x
+
+
 def invert_pos(pos):
     inversion = np.array([[0, 0, -1], [0, -1, 0], [-1, 0, 0]])
     inversion_func = lambda pos: inversion.dot(np.array(pos, ndmin=2).transpose()).flatten()
     return tuple(map(inversion_func, pos))
 
 
-def counter(pattern: mofun.Atoms, structure: mofun.Atoms, not_pattern: mofun.Atoms | None = None, first_unique: bool = True) -> int:
+def counter(pattern: mofun.Atoms, structure: mofun.Atoms, not_patterns: mofun.Atoms | tuple[mofun.Atoms, ...] | None = None, first_unique: bool = True) -> int:
     results: list = mofun.find_pattern_in_structure(structure, pattern)
-    if not_pattern is not None:
-        not_results: list = mofun.find_pattern_in_structure(structure, not_pattern)
-        not_center_atoms = {res[0] for res in not_results }
-        for res in results:
-            if res[0] in not_center_atoms: results.remove(res)
+    if not_patterns is not None:
+        if not isinstance(not_patterns, (tuple, list)): not_patterns = (not_patterns,)
+        for not_pattern in not_patterns:
+            not_results: list = mofun.find_pattern_in_structure(structure, not_pattern)
+            not_center_atoms = {res[0] for res in not_results}
+            for res in dcp(results):
+                if res[0] in not_center_atoms: results.remove(res)
     if first_unique:
         center_atoms = set()
-        for res in results:
+        for res in dcp(results):
             if res[0] in center_atoms: results.remove(res)
             else: center_atoms.add(res[0])
     return len(results)
@@ -41,14 +48,19 @@ def counter(pattern: mofun.Atoms, structure: mofun.Atoms, not_pattern: mofun.Ato
 def count_methyls(atoms: Atoms | mofun.Atoms) -> int:
     mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
     methyls_count = counter(
-        pattern=(methyl_patt :=mofun.Atoms(elements="CHHH", positions=[[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602], [ 0.63284602, -0.63284602, -0.63284602], [-0.63284602,  0.63284602, -0.63284602]])),
+        pattern=(methyl_patt :=mofun.Atoms(elements="CHHH", positions=(methyl_pos := [[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602], [ 0.63284602, -0.63284602, -0.63284602], [-0.63284602,  0.63284602, -0.63284602]]))),
+        structure=mofun_atoms
+    )
+
+    methyls_count_reversed = counter(
+        pattern=(methyl_patt_rev :=mofun.Atoms(elements="CHHH", positions=methyl_pos[:1] + methyl_pos[::-1][:3] )),
         structure=mofun_atoms
     )
 
     alkane_count = counter(
         pattern=mofun.Atoms(elements='CHH', positions=[[-3.18155796e-05,  5.86340743e-01,  6.05774660e-05], [-3.32088576e-05,  1.25011122e+00,  8.80447512e-01], [-6.47463927e-05,  1.25027547e+00, -8.80200664e-01]]),
         structure=mofun_atoms,
-        not_pattern=methyl_patt
+        not_patterns=(methyl_patt, methyl_patt_rev)
     )
 
     #patterns = [
@@ -58,7 +70,7 @@ def count_methyls(atoms: Atoms | mofun.Atoms) -> int:
     #    mofun.Atoms(elements="NCCHH", positions=invert_pos(pos))
     #    ]
 
-    return methyls_count + alkane_count
+    return methyls_count + methyls_count_reversed + alkane_count
 
 
 def count_iso_carbon(atoms: Atoms | mofun.Atoms) -> int:

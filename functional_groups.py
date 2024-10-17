@@ -19,25 +19,46 @@ import mofun
 
 def invert_pos(pos):
     inversion = np.array([[0, 0, -1], [0, -1, 0], [-1, 0, 0]])
-
     inversion_func = lambda pos: inversion.dot(np.array(pos, ndmin=2).transpose()).flatten()
     return tuple(map(inversion_func, pos))
 
 
-def counter(pattern, structure) -> int:
-    return len(mofun.find_pattern_in_structure(structure, pattern))
+def counter(pattern: mofun.Atoms, structure: mofun.Atoms, not_pattern: mofun.Atoms | None = None, first_unique: bool = True) -> int:
+    results: list = mofun.find_pattern_in_structure(structure, pattern)
+    if not_pattern is not None:
+        not_results: list = mofun.find_pattern_in_structure(structure, not_pattern)
+        not_center_atoms = {res[0] for res in not_results }
+        for res in results:
+            if res[0] in not_center_atoms: results.remove(res)
+    if first_unique:
+        center_atoms = set()
+        for res in results:
+            if res[0] in center_atoms: results.remove(res)
+            else: center_atoms.add(res[0])
+    return len(results)
 
 
 def count_methyls(atoms: Atoms | mofun.Atoms) -> int:
     mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
-    patterns = [
-        mofun.Atoms(elements="CHHH", positions=[[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602], [ 0.63284602, -0.63284602, -0.63284602], [-0.63284602,  0.63284602, -0.63284602]]),
-        mofun.Atoms(elements="CCCHH", positions=[(0.867, 1.760, 1.589), (2.184, 2.409, 1.163), (3.417, 1.604, 1.580), (2.252, 3.424, 1.591), (2.193, 2.542, 0.067)]),
-        mofun.Atoms(elements="NCCHH", positions=(pos := [(0.867, 1.760, 1.589), (2.184, 2.409, 1.163), (3.417, 1.604, 1.580), (2.252, 3.424, 1.591), (2.193, 2.542, 0.067)])),
-        mofun.Atoms(elements="NCCHH", positions=invert_pos(pos))
-        ]
+    methyls_count = counter(
+        pattern=(methyl_patt :=mofun.Atoms(elements="CHHH", positions=[[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602], [ 0.63284602, -0.63284602, -0.63284602], [-0.63284602,  0.63284602, -0.63284602]])),
+        structure=mofun_atoms
+    )
 
-    return sum(counter(patt, mofun_atoms) for patt in patterns)
+    alkane_count = counter(
+        pattern=mofun.Atoms(elements='CHH', positions=[[-3.18155796e-05,  5.86340743e-01,  6.05774660e-05], [-3.32088576e-05,  1.25011122e+00,  8.80447512e-01], [-6.47463927e-05,  1.25027547e+00, -8.80200664e-01]]),
+        structure=mofun_atoms,
+        not_pattern=methyl_patt
+    )
+
+    #patterns = [
+    #    mofun.Atoms(elements="CHHH", positions=[[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602], [ 0.63284602, -0.63284602, -0.63284602], [-0.63284602,  0.63284602, -0.63284602]]),
+    #    mofun.Atoms(elements="CCCHH", positions=[(0.867, 1.760, 1.589), (2.184, 2.409, 1.163), (3.417, 1.604, 1.580), (2.252, 3.424, 1.591), (2.193, 2.542, 0.067)]),
+    #    mofun.Atoms(elements="NCCHH", positions=(pos := [(0.867, 1.760, 1.589), (2.184, 2.409, 1.163), (3.417, 1.604, 1.580), (2.252, 3.424, 1.591), (2.193, 2.542, 0.067)])),
+    #    mofun.Atoms(elements="NCCHH", positions=invert_pos(pos))
+    #    ]
+
+    return methyls_count + alkane_count
 
 
 def count_iso_carbon(atoms: Atoms | mofun.Atoms) -> int:
@@ -69,9 +90,8 @@ def count_neo_carbons(atoms: Atoms | mofun.Atoms) -> int:
 
 def count_amines(atoms: Atoms | mofun.Atoms) -> int:
     mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
-    amine = mofun.Atoms(elements='CNHH', positions=(poss := np.array([[1.33327003, 19.571581  , 0.],
-                                                             [ 2.552727  ,  0.38599328,  0.        ],
-                                                             [ 2.57050018,  0.99844134,  0.8183404 ],
-                                                             [ 2.57050018,  0.99844134, 19.1816596 ]])))
+    amine = mofun.Atoms(elements='NHH', positions=(poss := np.array([[ 0.00000000e+00, -9.28668405e-06,  4.03847481e-03],
+       [ 0.00000000e+00, -9.45924457e-01, -3.82932255e-01],
+       [ 8.19109801e-01,  4.73016872e-01, -3.82953110e-01]])))
 
     return counter(amine, mofun_atoms)

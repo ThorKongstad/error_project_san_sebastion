@@ -48,9 +48,9 @@ def main(db_id: int, db_dir: str):
     barrier()
 
     calc = Vasp(atoms=atoms,
-                txt=f'{name}_{functional}_opt.txt',
+                txt=f'{name}_id{db_id}_{functional}_opt.txt',
                 xc=functional,
-                system=f'{name}_{functional}_opt',  # Insert the name of the system
+                system=f'{name}_id{db_id}_{functional}_opt',  # Insert the name of the system
                 istart=0,  # Wavefunction
                 icharg=2,  # Charge: 1-file 2-atom 10-const
                 # PREC = Normal           # Specifies the "precision"-mode

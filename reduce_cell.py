@@ -28,9 +28,9 @@ def main(db_id: int, db_dir: str):
         atoms: Atoms = row.toatoms()
         name = row.get('name')
 
-    scaled_pos = atoms.get_scaled_positions()
-    atoms.cell.array = np.array([[15, 0, 0], [0, 15, 0], [0, 0, 15]])
-    atoms.set_scaled_positions(scaled_pos)
+    #scaled_pos = atoms.get_scaled_positions()
+    atoms.set_cell([[15, 0, 0], [0, 15, 0], [0, 0, 15]], scale_atoms=True)
+    #atoms.set_scaled_positions(scaled_pos)
 
     update_db(db_dir, dict(id=db_id, atoms=atoms))
 

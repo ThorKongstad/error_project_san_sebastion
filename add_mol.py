@@ -13,7 +13,7 @@ import ase.db as db
 # import numpy as np
 
 
-def main(struc_path: str, name: str, functional: str, db_dir: str,):
+def main(struc_path: str, name: str, functional: str, db_dir: str, overwrite=None):
     # create ase mol
     if 'traj' == struc_path[-4:]: atoms = read(struc_path)
     else: atoms = read(struc_path, format='vasp')
@@ -24,7 +24,7 @@ def main(struc_path: str, name: str, functional: str, db_dir: str,):
 
     with db.connect(db_dir) as db_obj:
         # db_id = db_obj.reserve(xc = functional, smiles=smile)
-        db_obj.write(atoms=atoms, xc=functional, name=name, relaxed=False, vibration=False,)
+        db_obj.write(id=overwrite, atoms=atoms, xc=functional, name=name, relaxed=False, vibration=False,)
 
 
 if __name__ == '__main__':
@@ -33,6 +33,7 @@ if __name__ == '__main__':
     parser.add_argument('smiles_str')
     parser.add_argument('functional', help='str denoting what fucntional to calculate with')
     parser.add_argument('database', help='name or directory for the database.',)
+    parser.add_argument('-overwrite', type=int, default=None)
     args = parser.parse_args()
 
     main(struc_path=args.structure, name=args.smiles_str, functional=args.functional, db_dir=args.database)

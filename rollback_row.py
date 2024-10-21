@@ -22,7 +22,7 @@ def main(backup_database: str, backup_database_id: int, overwrite_database: str,
     if not os.path.basename(overwrite_database) in os.listdir(db_path if len(db_path := os.path.dirname(overwrite_database)) > 0 else '.'): raise FileNotFoundError("Can't find database")
     with db.connect(overwrite_database) as db_obj:
         # db_id = db_obj.reserve(xc = functional, smiles=smile)
-        db_obj.write(id=overwrite_database_id, atoms=row)
+        db_obj.write(id=overwrite_database_id, atoms=row, key_value_pairs=row.key_value_pairs)
 
 
 if __name__ == '__main__':

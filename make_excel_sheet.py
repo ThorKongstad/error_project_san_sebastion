@@ -45,7 +45,7 @@ def main(database_dir: str):
             except: pass
         work_sheet.cell(i+2, len(functional_list) + 2, reac.experimental_ref)
 
-    excel_file.save('reaction_results.xlsl')
+    excel_file.save('reaction_results.xlsx')
 
 
 if __name__ == '__main__':

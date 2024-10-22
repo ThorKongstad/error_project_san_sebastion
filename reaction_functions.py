@@ -111,5 +111,5 @@ def get_needed_structures(reactions_seq: Sequence[reaction]):
     dictionary_of_needed_strucs = {'molecule': [], 'slab': [], 'adsorbate': []}
     for reac in reactions_seq:
         for compo in reac.reactants + reac.products:
-            dictionary_of_needed_strucs[compo.type].append(compo.name)
+            if compo.name not in dictionary_of_needed_strucs[compo.type]: dictionary_of_needed_strucs[compo.type].append(compo.name)
     return dictionary_of_needed_strucs

@@ -50,14 +50,14 @@ amine_formation: Tuple[reaction] = (
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 11 / 2)), (('molecule', 'tert-butylamine', 1), ('molecule', 'oxygen', 21 / 4)), 16.17),
     reaction((('molecule', 'carbon-monoxide', 2), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', 'dimethylamine', 1), ('molecule', 'oxygen', 13 / 4)), 9.92),
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 11 / 2)), (('molecule', 'diethylamine', 1), ('molecule', 'oxygen', 21 / 4)), 16.67),
-    reaction((('molecule', 'carbon-monoxide', 5), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 13 / 2)), (('molecule', 'methyl-tert-butylamine', 1), ('molecule', 'oxygen', 25 / 4)), 19.95),
+    reaction((('molecule', 'carbon-monoxide', 5), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 13 / 2)), (('molecule', 'methyltertbutylamine', 1), ('molecule', 'oxygen', 25 / 4)), 19.95),
     reaction((('molecule', 'carbon-monoxide', 6), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 15 / 2)), (('molecule', 'dipropylamine', 1), ('molecule', 'oxygen', 29 / 4)), 23.52),
-    reaction((('molecule', 'carbon-monoxide', 6), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 15 / 2)), (('molecule', 'diisoprpylamine', 1), ('molecule', 'oxygen', 29 / 4)), 23.23),
-    reaction((('molecule', 'carbon-monoxide', 7), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 17 / 2)), (('molecule', 'isopropyl-terbutylamine', 1), ('molecule', 'oxygen', 33 / 4)), 26.67),
+    reaction((('molecule', 'carbon-monoxide', 6), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 15 / 2)), (('molecule', 'diisopropylamine', 1), ('molecule', 'oxygen', 29 / 4)), 23.23),
+    reaction((('molecule', 'carbon-monoxide', 7), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 17 / 2)), (('molecule', 'isopropyl-tertbutylamine', 1), ('molecule', 'oxygen', 33 / 4)), 26.67),
     reaction((('molecule', 'carbon-monoxide', 8), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 19 / 2)), (('molecule', 'dibutylamine', 1), ('molecule', 'oxygen', 37 / 4)), 30.41),
     reaction((('molecule', 'carbon-monoxide', 8), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 19 / 2)), (('molecule', 'butylisobutylamine', 1), ('molecule', 'oxygen', 37 / 4)), 30.26),
     reaction((('molecule', 'carbon-monoxide', 8), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 19 / 2)), (('molecule', 'diisobutylamine', 1), ('molecule', 'oxygen', 37 / 4)), 30.17),
-    reaction((('molecule', 'carbon-monoxide', 8), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 19 / 2)), (('molecule', 'diterbutylamine', 1), ('molecule', 'oxygen', 37 / 4)), 30.25),
+    reaction((('molecule', 'carbon-monoxide', 8), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 19 / 2)), (('molecule', 'ditertbutylamine', 1), ('molecule', 'oxygen', 37 / 4)), 30.25),
     reaction((('molecule', 'carbon-monoxide', 6), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 15 / 2)), (('molecule', 'triethylamine', 1), ('molecule', 'oxygen', 29 / 4)), 23.76),
     reaction((('molecule', 'carbon-monoxide', 9), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 21 / 2)), (('molecule', 'tripropylamine', 1), ('molecule', 'oxygen', 41 / 4)), 34.01),
     reaction((('molecule', 'carbon-monoxide', 3), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 9 / 2)), (('molecule', 'trimethylamine', 1), ('molecule', 'oxygen', 17 / 4)), 13.52),
@@ -84,14 +84,14 @@ nitrate_formation: Tuple[reaction] = (
 )
 
 nitrite_formation: Tuple[reaction] = (
-    reaction((('molecule', 'nitric-oxide', 1), ('molecule', 'water', 1)), (('molecule', 'nitrous-acid', 1), ('molecule', 'hydrogen', 1 / 2)), 0.74),
-    reaction((('molecule', 'carbon-monoxide', 1), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 3 / 2)), (('molecule', 'methylnitrite', 1), ('molecule', 'oxygen', 3 / 4)), 3.27),
-    reaction((('molecule', 'carbon-monoxide', 2), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 5 / 2)), (('molecule', 'ethylnitrite', 1), ('molecule', 'oxygen', 7 / 4)), 6.49),
-    reaction((('molecule', 'carbon-monoxide', 3), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', 'propylnitrite', 1), ('molecule', 'oxygen', 11 / 4)), 10.03),
-    reaction((('molecule', 'carbon-monoxide', 3), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', 'isopropylnitrite', 1), ('molecule', 'oxygen', 11 / 4)), 9.88),
+    reaction((('molecule', 'nitric-oxide', 1), ('molecule', 'water', 1)), (('molecule', 'nitrous-acid-trans', 1), ('molecule', 'hydrogen', 1 / 2)), 0.74),
+    reaction((('molecule', 'carbon-monoxide', 1), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 3 / 2)), (('molecule', 'methyl-nitrite', 1), ('molecule', 'oxygen', 3 / 4)), 3.27),
+    reaction((('molecule', 'carbon-monoxide', 2), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 5 / 2)), (('molecule', 'ethyl-nitrite', 1), ('molecule', 'oxygen', 7 / 4)), 6.49),
+    reaction((('molecule', 'carbon-monoxide', 3), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', 'propyl-nitrite', 1), ('molecule', 'oxygen', 11 / 4)), 10.03),
+    reaction((('molecule', 'carbon-monoxide', 3), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', 'isopropyl-nitrite', 1), ('molecule', 'oxygen', 11 / 4)), 9.88),
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 9 / 2)), (('molecule', 'butyl-nitrite', 1), ('molecule', 'oxygen', 15 / 4)), 13.4),
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 9 / 2)), (('molecule', 'sec-butyl-nitrite', 1), ('molecule', 'oxygen', 15 / 4)), 13.33),
-    reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 9 / 2)), (('molecule', 'tert-butyl-nitrite', 1), ('molecule', 'oxygen', 15 / 4)), 13.13),
+    reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 9 / 2)), (('molecule', 'tert-butylnitrite', 1), ('molecule', 'oxygen', 15 / 4)), 13.13),
 )
 
 hydroxylamineamine_formation: Tuple[reaction] = (
@@ -99,7 +99,7 @@ hydroxylamineamine_formation: Tuple[reaction] = (
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 11 / 2)), (('molecule', 'n.n-diethylhydroxylamine', 1), ('molecule', 'oxygen', 19 / 4)), 16.16),
     reaction((('molecule', 'carbon-monoxide', 1), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 5 / 2)), (('molecule', 'o-methylhydroxylamine', 1), ('molecule', 'oxygen', 7 / 4)), 6.21),
     reaction((('molecule', 'carbon-monoxide', 1), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 5 / 2)), (('molecule', 'n-methylhydroxylamine', 1), ('molecule', 'oxygen', 7 / 4)), 5.94),
-    reaction((('molecule', 'carbon-monoxide', 2), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', 'n.o-diethylhydroxylamine', 1), ('molecule', 'oxygen', 11 / 4)), 9.73),
+    reaction((('molecule', 'carbon-monoxide', 2), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', 'n.o-dimethylhydroxylamine', 1), ('molecule', 'oxygen', 11 / 4)), 9.73),
 )
 
 aromatic_formation: Tuple[reaction] = (
@@ -124,7 +124,7 @@ aniline_formations: Tuple[reaction] = (
 
 hydrazine_formation: Tuple[reaction] = (
     reaction((('molecule', 'nitric-oxide', 2), ('molecule', 'water', 2)), (('molecule', 'hydrazine', 1), ('molecule', 'oxygen', 2)), 4.11),
-    reaction((('molecule', 'carbon-monoxide', 6), ('molecule', 'nitric-oxide', 2), ('molecule', 'water', 4)), (('molecule', 'phenyl-hydrazine', 1), ('molecule', 'oxygen', 6)), 17.11),
+    reaction((('molecule', 'carbon-monoxide', 6), ('molecule', 'nitric-oxide', 2), ('molecule', 'water', 4)), (('molecule', 'phenylhydrazine', 1), ('molecule', 'oxygen', 6)), 17.11),
     reaction((('molecule', 'carbon-monoxide', 2), ('molecule', 'nitric-oxide', 2), ('molecule', 'water', 4)), (('molecule', '1.2-dimethylhydrazine', 1), ('molecule', 'oxygen', 4)), 11.38),
     reaction((('molecule', 'carbon-monoxide', 2), ('molecule', 'nitric-oxide', 2), ('molecule', 'water', 4)), (('molecule', '1.1-dimethylhydrazine', 1), ('molecule', 'oxygen', 4)), 11.3),
 )
@@ -150,7 +150,7 @@ nitrile_formation: Tuple[reaction] = (
     reaction((('molecule', 'carbon-monoxide', 7), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 13 / 2)), (('molecule', 'heptanenitrile', 1), ('molecule', 'oxygen', 29 / 4)), 23.04),
     reaction((('molecule', 'carbon-monoxide', 8), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 15 / 2)), (('molecule', 'octanenitrile', 1), ('molecule', 'oxygen', 33 / 4)), 26.49),
     reaction((('molecule', 'carbon-monoxide', 10), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 19 / 2)), (('molecule', 'decanenitrile', 1), ('molecule', 'oxygen', 41 / 4)), 33.37),
-    reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', '2-ethylpropanenitrile', 1), ('molecule', 'oxygen', 17 / 4)), 12.65),
+    reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', '2-methylpropanenitrile', 1), ('molecule', 'oxygen', 17 / 4)), 12.65),
 )
 
 all_reactions = simple_alkane_formation + iso_alkane_formation + neo_alakane_formation + amine_formation + nitro_formation + nitrate_formation + nitrite_formation + hydroxylamineamine_formation + aromatic_formation + aniline_formations + hydrazine_formation + amide_formation + nitrile_formation

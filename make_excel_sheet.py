@@ -12,9 +12,9 @@ import openpyxl as xl
 
 
 def missing_structures(functional: Functional, needed_strcutures: dict):
-    missing_molecules = [key for key in needed_strcutures['molecule'] if key not in functional.molecule.keys()]
-    missing_adsorbates = [key for key in needed_strcutures['adsorbate'] if key not in functional.adsorbate.keys()]
-    missing_slab = [key for key in needed_strcutures['slab'] if key not in functional.slab.keys()]
+    missing_molecules = {key for key in needed_strcutures['molecule'] if key not in functional.molecule.keys()}
+    missing_adsorbates = {key for key in needed_strcutures['adsorbate'] if key not in functional.adsorbate.keys()}
+    missing_slab = {key for key in needed_strcutures['slab'] if key not in functional.slab.keys()}
 
     if any(len(mis)>0 for mis in (missing_adsorbates, missing_slab, missing_molecules)):
         print(f'{functional.name} is missing')

@@ -29,16 +29,20 @@ def main(database_dir: str):
     deviation_sheet = excel_file.create_sheet('deviations')
 
     for i, func in enumerate(functional_list):
-        work_sheet.cell(1, i+2, func.name)
-        deviation_sheet.cell(1, i+2, func.name)
+        try:
+            work_sheet.cell(1, i+2, func.name)
+            deviation_sheet.cell(1, i+2, func.name)
+        except: pass
     work_sheet.cell(1, len(functional_list) + 2, 'exp ref')
 
     for i, reac in enumerate(all_reactions):
         work_sheet.cell(i+2, 1, reac.products[0].name)
         deviation_sheet.cell(i+2, 1, reac.products[0].name)
         for j, func in enumerate(functional_list):
-            work_sheet.cell(i+2, j+2, func.calculate_reaction_enthalpy(reac))
-            deviation_sheet.cell(i+2, j+2, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
+            try:
+                work_sheet.cell(i+2, j+2, func.calculate_reaction_enthalpy(reac))
+                deviation_sheet.cell(i+2, j+2, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
+            except: pass
         work_sheet.cell(i+2, len(functional_list) + 2, reac.experimental_ref)
 
     excel_file.save('reaction_results.xlsl')

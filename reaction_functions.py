@@ -39,7 +39,7 @@ class Functional:
         self.molecule = {}
         if mol_db is not None:
             for smile in needed_struc_dict['molecule']:
-                try: self.molecule.update({smile: mol_db.query(f'smiles == "{smile}" and xc == "{functional_name}" and {energy_type}.notna()').get(energy_type).iloc[0]})
+                try: self.molecule.update({smile: mol_db.query(f'name == "{smile}" and xc == "{functional_name}" and {energy_type}.notna()').get(energy_type).iloc[0]})
                 except: pass
 
         self.slab = {}
@@ -61,9 +61,9 @@ class Functional:
             self.molecule_bee = {}
             if mol_db is not None:
                 for smile in needed_struc_dict['molecule']:
-                    try: self.molecule_energy.update({smile: mol_db.query(f'smiles == "{smile}" and xc == "{functional_name}" and energy.notna()').get('energy').iloc[0]})
+                    try: self.molecule_energy.update({smile: mol_db.query(f'name == "{smile}" and xc == "{functional_name}" and energy.notna()').get('energy').iloc[0]})
                     except: pass
-                    try: self.molecule_bee.update({smile: np.array(bytes_to_object(mol_db.query(f'smiles == "{smile}" and xc == "{functional_name}" and _data.notna()').get('_data').iloc[0]).get('ensemble_en'))[:]})
+                    try: self.molecule_bee.update({smile: np.array(bytes_to_object(mol_db.query(f'name == "{smile}" and xc == "{functional_name}" and _data.notna()').get('_data').iloc[0]).get('ensemble_en'))[:]})
                     except: pass
 
 

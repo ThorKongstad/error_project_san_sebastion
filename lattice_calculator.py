@@ -168,7 +168,6 @@ def report(res: OptimizeResult) -> None:
 
 def main(metal: str, functional: str, slab_type: str, guess_lattice: Optional[float] = None, grid_spacing: float = 0.16, correction: Optional[str] = None):
 
-    at_number = chemical_symbols.index(metal)
     functional_folder = sanitize('_'.join([functional, correction]) if correction is not None else functional)
 
     script_overlab_protection_time = randint(0, 60)
@@ -182,6 +181,7 @@ def main(metal: str, functional: str, slab_type: str, guess_lattice: Optional[fl
     if guess_lattice is None:
         if slab_type == 'graphene': guess_lattice = 2.46
         else:
+            at_number = chemical_symbols.index(metal)
             if slab_type != reference_states[at_number].get('symmetry'): raise ValueError('the given slab type does not match the saved type for ase guess lattice')
             guess_lattice = reference_states[at_number].get('a')
 

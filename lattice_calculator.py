@@ -105,6 +105,8 @@ def calculate_pE_of_latt_vasp(lattice: float, metal: str, slab_type: str, functi
 #        case _:
 #            raise ValueError('Corrections were not recognised and have likely not been implement.')
 
+    atoms.pbc = True
+
     calc = Vasp(atoms=atoms,
                 txt=f'{functional_folder}/{metal}_latt_fit/lat-opt_{metal}_{slab_type}_a-{lattice}.txt',
                 xc=functional,

@@ -180,7 +180,7 @@ def main(metal: str, functional: str, slab_type: str, guess_lattice: Optional[fl
         sleep(script_overlab_protection_time)
 
     if guess_lattice is None:
-        if slab_type == 'grapene': guess_lattice = 2.46
+        if slab_type == 'graphene': guess_lattice = 2.46
         else:
             if slab_type != reference_states[at_number].get('symmetry'): raise ValueError('the given slab type does not match the saved type for ase guess lattice')
             guess_lattice = reference_states[at_number].get('a')

@@ -1,7 +1,6 @@
-#partition=katla
-#nprocshared=16
-#mem=2300MB
-#constrain='[v5]'
+#partition=p_medium
+#nprocshared=24
+#mem=4000MB
 
 import argparse
 import os
@@ -222,7 +221,7 @@ def main(metal: str, functional: str, slab_type: str, guess_lattice: Optional[fl
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('metal', type=str)
-    parser.add_argument('surface_type', type=str, choices=('fcc', 'bcc', 'hcp', 'graphane'))
+    parser.add_argument('surface_type', type=str, choices=('fcc', 'bcc', 'hcp', 'graphene'))
     parser.add_argument('func', type=str)
     parser.add_argument('--lattice', '-a', type=float)
     parser.add_argument('--correction', '-cor', type=str, choices=('DFTD4', 'D4'))

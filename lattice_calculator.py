@@ -110,6 +110,7 @@ def calculate_pE_of_latt_vasp(lattice: float, metal: str, slab_type: str, functi
     calc = Vasp(atoms=atoms,
                 txt=f'{functional_folder}/{metal}_latt_fit/lat-opt_{metal}_{slab_type}_a-{lattice}.txt',
                 xc=functional,
+                kpts=[11, 11, 11],
                 system=f'{functional_folder}/{metal}_latt_fit/lat-opt_{metal}_{slab_type}_a-{lattice}.txt',  # Insert the name of the system
                 istart=0,  # Wavefunction
                 icharg=2,  # Charge: 1-file 2-atom 10-const
@@ -119,7 +120,7 @@ def calculate_pE_of_latt_vasp(lattice: float, metal: str, slab_type: str, functi
                 nelmin=6,  # Minimum number of electronic steps
                 nelm=500,
                 ismear=0,  # Smearing
-                sigma=0.001,  # Smearing's Width (10^-3 for molecule)
+                sigma=0.2,  # Smearing's Width (10^-3 for molecule)
                 ibrion=2,  # Atomic optimization algorithm
                 nsw=500,  # Maximum number of ionic steps
                 potim=0.25,  # IBRION's scaling factor

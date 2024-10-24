@@ -26,7 +26,7 @@ import pathlib
 from time import sleep
 from random import randint
 from dataclasses import field, make_dataclass
-import plotly.graph_objects as go
+#import plotly.graph_objects as go
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_random
 
 
@@ -149,21 +149,21 @@ def report(res: OptimizeResult) -> None:
     parprint(f'finale lattice: {res.x}')
 
 
-def plot_steps(steps: 'steps', save_name: Optional[str]) -> None:
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-                     x=steps.lattice, y=steps.energy,
-                     mode='markers+lines',
-                     line=dict(color='grey')
-    ))
+#def plot_steps(steps: 'steps', save_name: Optional[str]) -> None:
+#    fig = go.Figure()
+#    fig.add_trace(go.Scatter(
+#                     x=steps.lattice, y=steps.energy,
+#                     mode='markers+lines',
+#                     line=dict(color='grey')
+#    ))
 
-    fig.update_layout(
-        xaxis_title=f'lattice constant',
-        yaxis_title='potential energy eV'
-    )
+#    fig.update_layout(
+#        xaxis_title=f'lattice constant',
+#        yaxis_title='potential energy eV'
+#    )
 
-    if save_name: fig.write_html(save_name)#, include_mathjax='cdn')
-    else: fig.show()
+#    if save_name: fig.write_html(save_name)#, include_mathjax='cdn')
+#    else: fig.show()
 
 
 def main(metal: str, functional: str, slab_type: str, guess_lattice: Optional[float] = None, grid_spacing: float = 0.16, correction: Optional[str] = None):
@@ -202,9 +202,9 @@ def main(metal: str, functional: str, slab_type: str, guess_lattice: Optional[fl
 
     if world.rank == 0 and opt_res.success:
         if 'lattice_calc.csv' not in os.listdir(): pathlib.Path('lattice_calc.csv').touch()
-        with open('lattice_calc.csv','a') as csv_file:
-            fields = ['metal', 'type', 'functional','lattice']
-            writer_obj = csv.DictWriter(csv_file,fieldnames=fields)
+        with open('lattice_calc.csv', 'a') as csv_file:
+            fields = ['metal', 'type', 'functional', 'lattice']
+            writer_obj = csv.DictWriter(csv_file, fieldnames=fields)
             writer_obj.writerow(
                 dict(
                     metal=metal,
@@ -215,7 +215,7 @@ def main(metal: str, functional: str, slab_type: str, guess_lattice: Optional[fl
             )
 
     parprint(opts_steps)
-    if world.rank == 0: plot_steps(opts_steps, f'{functional_folder}/opt_steps_{metal}_{functional}.html')
+#    if world.rank == 0: plot_steps(opts_steps, f'{functional_folder}/opt_steps_{metal}_{functional}.html')
 
 
 if __name__ == '__main__':

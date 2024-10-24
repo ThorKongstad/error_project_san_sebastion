@@ -15,8 +15,10 @@ import ase.db as db
 
 def main(struc_path: str, name: str, functional: str, db_dir: str, overwrite=None):
     # create ase mol
-    if 'traj' == struc_path[-4:]: atoms = read(struc_path)
-    else: atoms = read(struc_path, format='vasp')
+    #if 'traj' == struc_path[-4:]: atoms = read(struc_path)
+    #else: atoms = read(struc_path, format='vasp')
+
+    atoms = read(struc_path)
 
     atoms.pbc = True
 

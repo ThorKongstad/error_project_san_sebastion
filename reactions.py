@@ -9,7 +9,7 @@ from error_project_san_sebastion.reaction_functions import reaction
 # https://doi.org/10.1002/cctc.202100125
 
 
-simple_alkane_fomation: Tuple[reaction, ...] = (
+simple_alkane_formation: Tuple[reaction, ...] = (
     reaction((('slab', 'graphene', 0.5), ('molecule', 'hydrogen', 2),), (('molecule', 'methane', 1),), -0.77),
     reaction((('slab', 'graphene', 1), ('molecule', 'hydrogen', 3),), (('molecule', 'ethane', 1),), -0.87),
     reaction((('slab', 'graphene', 1.5), ('molecule', 'hydrogen', 4),), (('molecule', 'propane', 1),), -1.08),

@@ -95,5 +95,5 @@ if __name__ == '__main__':
     parser.add_argument('--verbose', action='store_true')
     args = parser.parse_args()
 
-    main(args.molecule_db_directory, args.verbose)
+    main(args.molecule_db_directory, args.solid_db_directory, args.verbose)
 

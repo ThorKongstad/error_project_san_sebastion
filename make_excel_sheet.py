@@ -36,6 +36,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     pd_solid_dat = build_pd(solid_database_dir)
 
     pd_molecule_dat['enthalpy'] = pd_molecule_dat['energy'] + pd_molecule_dat['zpe']
+    pd_solid_dat['enthalpy'] = pd_solid_dat['energy'] + pd_solid_dat['zpe']
 
     functional_set = {xc for _, row in pd_molecule_dat.iterrows() if not pd.isna((xc := row.get('xc')))}
 

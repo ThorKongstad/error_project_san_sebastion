@@ -45,7 +45,7 @@ class Functional:
         self.slab = {}
         if slab_db is not None:
             for structure_str in needed_struc_dict['slab']:
-                try: self.slab.update({structure_str: slab_db.query(f'name == "{structure_str}" and xc == "{functional_name}" and energy.notna()').get('energy').iloc[0]})
+                try: self.slab.update({structure_str: slab_db.query(f'name == "{structure_str}" and xc == "{functional_name}" and {energy_type}.notna()').get('energy').iloc[0]})
                 except: pass
 
         self.adsorbate = {}

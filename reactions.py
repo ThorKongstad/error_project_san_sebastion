@@ -158,7 +158,7 @@ small_molecule_formation: Tuple[reaction, ...] = (
     reaction((('slab', 'graphene', 0.5), ('molecule', 'oxygen', 0.5),), (('molecule', 'carbon-monoxide', 1),), -1.15),
 )
 
-all_formation_reactions = simple_alkane_formation + iso_alkane_formation + neo_alakane_formation + amine_formation + nitro_formation + nitrate_formation + nitrite_formation + hydroxylamineamine_formation + aromatic_formation + aniline_formations + hydrazine_formation + amide_formation + nitrile_formation + small_molecule_formation
+all_formation_reactions = simple_alkane_formation + iso_alkane_formation + neo_alakane_formation + amine_formation + nitro_formation + nitrate_formation + nitrite_formation + hydroxylamineamine_formation + aromatic_formation + aniline_formation + hydrazine_formation + amide_formation + nitrile_formation + small_molecule_formation
 
 ####
 simple_alkane_gaseous: Tuple[reaction, ...] = (

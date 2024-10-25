@@ -33,7 +33,7 @@ def missing_structures(functional: Functional, needed_strcutures: dict):
 
 def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = False):
     pd_molecule_dat = build_pd(molecule_database_dir)
-    pd_solid_dat = build_pd(molecule_database_dir)
+    pd_solid_dat = build_pd(solid_database_dir)
 
     pd_molecule_dat['enthalpy'] = pd_molecule_dat['energy'] + pd_molecule_dat['zpe']
 

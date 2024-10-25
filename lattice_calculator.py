@@ -92,7 +92,7 @@ def calculate_pE_of_latt_vasp(lattice: float, metal: str, slab_type: str, functi
 
     match slab_type.lower():
         case 'fcc' | 'hcp' | 'bcc': atoms = bulk(name=metal, crystalstructure=slab_type, a=lattice)
-        case 'graphene': atoms = graphene(metal, a=lattice, vacuum=10)
+        case 'graphene': atoms = graphene(metal, a=lattice, vacuum=10).translate((0, 0, -2))
         case _: raise ValueError(f'Slab type was not recognised: {slab_type}')
 
 

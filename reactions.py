@@ -32,9 +32,9 @@ iso_alkane_formation: Tuple[reaction, ...] = (
 )
 
 neo_alakane_formation: Tuple[reaction, ...] = (
-    reaction((('slab', 'graphene', 2.5), ('molecule', 'hydrogen', 6),), (('molecule', 'neopentane', 1), ('molecule', 'oxygen', 11 / 2)), -1.74),
-    reaction((('slab', 'graphene', 3), ('molecule', 'hydrogen', 7),), (('molecule', 'neohexane', 1), ('molecule', 'oxygen', 13 / 2)), -1.93),
-    reaction((('slab', 'graphene', 3.5), ('molecule', 'hydrogen', 8),), (('molecule', 'neoheptane', 1), ('molecule', 'oxygen', 15 / 2)), -2.13),
+    reaction((('slab', 'graphene', 2.5), ('molecule', 'hydrogen', 6),), (('molecule', 'neopentane', 1),), -1.74),
+    reaction((('slab', 'graphene', 3), ('molecule', 'hydrogen', 7),), (('molecule', 'neohexane', 1),), -1.93),
+    reaction((('slab', 'graphene', 3.5), ('molecule', 'hydrogen', 8),), (('molecule', 'neoheptane', 1),), -2.13),
 )
 
 amine_formation: Tuple[reaction, ...] = (
@@ -69,7 +69,7 @@ nitro_formation: Tuple[reaction, ...] = (
     reaction((('slab', 'graphene', 1.5), ('molecule', 'hydrogen', 3.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 1)), (('molecule', '2-nitropropane', 1),), -1.44),
     reaction((('slab', 'graphene', 2), ('molecule', 'hydrogen', 4.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 1)), (('molecule', '1-nitrobutane', 1),), -1.49),
     reaction((('slab', 'graphene', 2), ('molecule', 'hydrogen', 4.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 1)), (('molecule', '2-nitrobutane', 1),), -1.7),
-    reaction((('slab', 'graphene', 2.5), ('molecule', 'hydrogen', 5.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 1)), (('molecule', '1-nitrobutane', 1),), -1.7),
+    reaction((('slab', 'graphene', 2.5), ('molecule', 'hydrogen', 5.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 1)), (('molecule', '1-nitropentane', 1),), -1.7),
     reaction((('slab', 'graphene', 2), ('molecule', 'hydrogen', 4.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 1)), (('molecule', '2-methyl-2-nitropropane', 1),), -1.84),
 )
 
@@ -107,7 +107,7 @@ aromatic_formation: Tuple[reaction, ...] = (
     reaction((('slab', 'graphene', 3.5), ('molecule', 'hydrogen', 4),), (('molecule', 'toluene', 1),), 0.52),
     reaction((('slab', 'graphene', 4), ('molecule', 'hydrogen', 5),), (('molecule', 'ethylbenzene', 1),), 0.31),
     reaction((('slab', 'graphene', 4.5), ('molecule', 'hydrogen', 6),), (('molecule', 'propylbenzene', 1),), 0.08),
-    reaction((('slab', 'graphene', 4.9), ('molecule', 'hydrogen', 6),), (('molecule', 'isopropylbenzene', 1),), 0.04),
+    reaction((('slab', 'graphene', 4.5), ('molecule', 'hydrogen', 6),), (('molecule', 'isopropylbenzene', 1),), 0.04),
     reaction((('slab', 'graphene', 5), ('molecule', 'hydrogen', 7),), (('molecule', 'butylbenzene', 1),), -0.12),
     reaction((('slab', 'graphene', 5), ('molecule', 'hydrogen', 7),), (('molecule', 'sec-butylbenzene', 1),), -0.19),
     reaction((('slab', 'graphene', 5), ('molecule', 'hydrogen', 7),), (('molecule', 'tert-butylbenzene', 1),), -0.24),

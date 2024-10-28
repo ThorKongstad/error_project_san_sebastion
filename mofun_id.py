@@ -49,7 +49,7 @@ def main(db_id: int, db_dir: str):
 
     print(f' there are {count_amines(mofun_atoms)} amines, {count_nitro(mofun_atoms)} nitro groups, {count_nitrate(mofun_atoms)} nitrates, {count_hydroxylamine(mofun_atoms)}, hydroxylamines, {count_hydrazine(mofun_atoms)} hydrazines, and {count_nitrile(mofun_atoms)} nitrile')
 
-
+    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('data_base_id', type=int)

@@ -149,8 +149,8 @@ def count_hydroxylamine(atoms: Atoms | mofun.Atoms) -> int:
 
 def count_hydrazine(atoms: Atoms | mofun.Atoms) -> int:
     mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
-    hydrazine = mofun.Atoms(elements='NN', positions=(poss := np.array([[-0.043953548802929676, 0.7070513347397736, 0.0064940885957106,],
-                                                                        [0.0439535488029264, -0.7070513347397744, 0.0064940885957106]])))
+    hydrazine = mofun.Atoms(elements='NN', positions=(poss := np.array([[-0.05104239599528282, 0.7165023983018459, -0.0017242674984179196],
+                                                                        [0.051042395995282805, -0.7165023983018488, -0.0017242674984179196]])))
 
     return counter(hydrazine, mofun_atoms, atol=0.2)
 

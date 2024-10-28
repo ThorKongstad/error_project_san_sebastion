@@ -95,11 +95,11 @@ def count_iso_carbon(atoms: Atoms | mofun.Atoms) -> int:
 
 def count_neo_carbons(atoms: Atoms | mofun.Atoms) -> int:
     mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
-    neo_carbon = mofun.Atoms(elements='CCCC',positions=(poss := np.array([[17.11237229, 17.11237229, 18.88762771],
-           [17.11237229, 18.88762771, 17.11237229],
-           [18.88762771, 17.11237229, 17.11237229],
-           [18., 18., 18.],
-           [18.88762771, 18.88762771, 18.88762771]])))
+    neo_carbon = mofun.Atoms(elements='CCCCC', positions=(poss := np.array([[0.0, 0.0, 0.0, ],
+                                                        [ 0.8876277091687248, 0.8876277091687248, 0.8876277091687248, ],
+                                                        [ -0.887627709168727, -0.887627709168727, 0.8876277091687248, ],
+                                                        [ -0.887627709168727, 0.8876277091687248, -0.887627709168727, ],
+                                                        [ 0.8876277091687248, -0.887627709168727, -0.887627709168727]])))
 
     neo_carbon_results = mofun.find_pattern_in_structure(mofun_atoms, neo_carbon)
     return len(neo_carbon_results)

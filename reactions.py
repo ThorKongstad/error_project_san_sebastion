@@ -221,7 +221,7 @@ nitro_gaseous: Tuple[reaction, ...] = (
     reaction((('molecule', 'carbon-monoxide', 3), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', '2-nitropropane', 1), ('molecule', 'oxygen', 11 / 4)), 9.82),
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 9 / 2)), (('molecule', '1-nitrobutane', 1), ('molecule', 'oxygen', 15 / 4)), 13.42),
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 9 / 2)), (('molecule', '2-nitrobutane', 1), ('molecule', 'oxygen', 15 / 4)), 13.22),
-    reaction((('molecule', 'carbon-monoxide', 5), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 11 / 2)), (('molecule', '1-nitrobutane', 1), ('molecule', 'oxygen', 19 / 4)), 16.86),
+    reaction((('molecule', 'carbon-monoxide', 5), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 11 / 2)), (('molecule', '1-nitropentane', 1), ('molecule', 'oxygen', 19 / 4)), 16.86),
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 9 / 2)), (('molecule', '2-methyl-2-nitropropane', 1), ('molecule', 'oxygen', 15 / 4)), 13.08),
 )
 

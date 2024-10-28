@@ -28,6 +28,14 @@ def invert_pos(pos):
     return tuple(map(inversion_func, pos))
 
 
+def big_pattern_catcher(func):
+    def wrap(*args, **kwargs):
+        try: return func(*args, **kwargs)
+        except Exception: return 0
+    return wrap
+
+
+@ big_pattern_catcher
 def counter(pattern: mofun.Atoms, structure: mofun.Atoms, not_patterns: mofun.Atoms | tuple[mofun.Atoms, ...] | None = None, first_unique: bool = True, atol: float = 0.05) -> int:
     results: list = mofun.find_pattern_in_structure(structure, pattern, atol=atol)
     if not_patterns is not None:

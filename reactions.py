@@ -95,7 +95,7 @@ nitrite_formation: Tuple[reaction, ...] = (
 )
 
 hydroxylamineamine_formation: Tuple[reaction, ...] = (
-    reaction((('molecule', 'hydrogen', 1.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 1)), (('molecule', 'hydroxylamine', 1),), -0.51),
+    reaction((('molecule', 'hydrogen', 1.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 0.5)), (('molecule', 'hydroxylamine', 1),), -0.51),
     reaction((('slab', 'graphene', 2), ('molecule', 'hydrogen', 5.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 0.5)), (('molecule', 'n.n-diethylhydroxylamine', 1),), -1.26),
     reaction((('slab', 'graphene', 0.5), ('molecule', 'hydrogen', 2.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 0.5)), (('molecule', 'o-methylhydroxylamine', 1),), -0.26),
     reaction((('slab', 'graphene', 0.5), ('molecule', 'hydrogen', 2.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 0.5)), (('molecule', 'n-methylhydroxylamine', 1),), -0.52),

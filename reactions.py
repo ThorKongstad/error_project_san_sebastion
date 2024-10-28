@@ -18,7 +18,7 @@ simple_alkane_formation: Tuple[reaction, ...] = (
     reaction((('slab', 'graphene', 3), ('molecule', 'hydrogen', 7),), (('molecule', 'hexane', 1),), -1.73),
     reaction((('slab', 'graphene', 3.5), ('molecule', 'hydrogen', 8),), (('molecule', 'heptane', 1),), -1.94),
     reaction((('slab', 'graphene', 4), ('molecule', 'hydrogen', 9),), (('molecule', 'octane', 1),), -2.16),
-    reaction((('slab', 'graphene', 4.5), ('molecule', 'hydrogen', 10),), (('molecule', 'decane', 1),), -2.59),
+    reaction((('slab', 'graphene', 5), ('molecule', 'hydrogen', 11),), (('molecule', 'decane', 1),), -2.59),
 )
 
 iso_alkane_formation: Tuple[reaction, ...] = (

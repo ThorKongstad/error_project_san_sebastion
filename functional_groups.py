@@ -50,14 +50,14 @@ def count_methyls(atoms: Atoms | mofun.Atoms) -> int:
     methyls_count = counter(
         pattern=(methyl_patt := mofun.Atoms(elements="CHHH", positions=(methyl_pos := [[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602], [ 0.63284602, -0.63284602, -0.63284602], [-0.63284602,  0.63284602, -0.63284602]]))),
         structure=mofun_atoms,
-        atol=0.2
+        atol=0.5
     )
 
     alkane_count = counter(
         pattern=mofun.Atoms(elements='CHH', positions=[[-3.18155796e-05,  5.86340743e-01,  6.05774660e-05], [-3.32088576e-05,  1.25011122e+00,  8.80447512e-01], [-6.47463927e-05,  1.25027547e+00, -8.80200664e-01]]),
         structure=mofun_atoms,
         not_patterns=(methyl_patt,),
-        atol=0.2
+        atol=0.5
     )
 
     #patterns = [
@@ -79,7 +79,7 @@ def count_iso_carbon(atoms: Atoms | mofun.Atoms) -> int:
         pattern=mofun.Atoms(elements="CH", positions=[[ 0.        ,  0.        ,  0.        ], [ 0.63284602,  0.63284602,  0.63284602]]),
         structure=mofun_atoms,
         not_patterns=(alkane_pattern,),
-        atol=0.2
+        atol=0.5
     )
 
     return iso_count
@@ -104,3 +104,55 @@ def count_amines(atoms: Atoms | mofun.Atoms) -> int:
        [ 8.19109801e-01,  4.73016872e-01, -3.82953110e-01]])))
 
     return counter(amine, mofun_atoms)
+
+
+def count_nitro(atoms: Atoms | mofun.Atoms) -> int:
+    mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
+    nitrate = mofun.Atoms(elements='NOOO',
+                          positions=(poss := np.array([[0.011908105419858003, 0.6033905189532001, 0.0, ],
+                                                       [-1.1972268438180045, 0.5643155515465921, 0.0, ],
+                                                       [0.746479277814504, 1.5547357964356223, 0.0, ],
+                                                       [0.6911508880881579, -0.6097007037117663, 0.0]])))
+    nitro = mofun.Atoms(elements='NOO', positions=(poss := np.array([[ -0.09, -0.006, 0],
+       [-0.633, 1.086, 0],
+       [-0.6622409883469782, -1.084061319218641, 0.0]])))
+
+    return counter(nitro, mofun_atoms, not_patterns=nitrate, atol=0.5)
+
+
+def count_nitrate(atoms: Atoms | mofun.Atoms) -> int:
+    mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
+    nitrate = mofun.Atoms(elements='NOOO', positions=(poss := np.array([[0.011908105419858003, 0.6033905189532001, 0.0, ],
+                                                                        [-1.1972268438180045, 0.5643155515465921, 0.0, ],
+                                                                        [0.746479277814504, 1.5547357964356223, 0.0, ],
+                                                                        [0.6911508880881579, -0.6097007037117663, 0.0]])))
+
+    return counter(nitrate, mofun_atoms, atol=0.2)
+
+
+def count_hydroxylamine(atoms: Atoms | mofun.Atoms) -> int:
+    mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
+    hydroxylamine = mofun.Atoms(elements='NHO', positions=(poss := np.array([[-0.04137370584640099, 0.017367187728555, 0.20813707658508657,],
+                                                                        [-0.07674818036593378, -1.8822985589231374, 0.3622425058205117,],
+                                                                        [-0.067365431436752, -1.2842511498652631, -0.39161222155933206]])))
+
+    return counter(hydroxylamine, mofun_atoms, atol=0.2)
+
+
+def count_hydrazine(atoms: Atoms | mofun.Atoms) -> int:
+    mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
+    hydrazine = mofun.Atoms(elements='NN', positions=(poss := np.array([[-0.043953548802929676, 0.7070513347397736, 0.0064940885957106,],
+                                                                        [0.0439535488029264, -0.7070513347397744, 0.0064940885957106]])))
+
+    return counter(hydrazine, mofun_atoms, atol=0.2)
+
+
+def count_nitrile(atoms: Atoms | mofun.Atoms) -> int:
+    mofun_atoms = atoms if isinstance(atoms, mofun.Atoms) else mofun.Atoms.from_ase_atoms(atoms)
+    nitrile = mofun.Atoms(elements='NC', positions=(poss := np.array([[0.0003618272271315, 0.00064023551643, -1.4296814167539034],
+                                                                      [9.49608749745e-05, 0.0001270950249525, -0.27591085098963575]])))
+    Nitrogen_hydrogen = mofun.Atoms(elements='NH', positions=(poss := np.array([[0.00000000e+00, -9.28668405e-06,  4.03847481e-03],
+       [0.00000000e+00, -9.45924457e-01, -3.82932255e-01]])))
+
+    return counter(nitrile, mofun_atoms, not_patterns=Nitrogen_hydrogen, atol=0.2)
+

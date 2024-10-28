@@ -5,7 +5,7 @@ import pathlib
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 from error_project_san_sebastion import sanitize, folder_exist
-from error_project_san_sebastion.functional_groups import count_methyls, count_amines, count_iso_carbon, count_neo_carbons
+from error_project_san_sebastion.functional_groups import count_methyls, count_amines, count_iso_carbon, count_neo_carbons, count_nitro, count_nitrate, count_hydroxylamine, count_hydrazine, count_nitrile
 
 from ase.io import read
 import ase.db as db
@@ -45,7 +45,9 @@ def main(db_id: int, db_dir: str):
 
     mofun_atoms = mofun.Atoms.from_ase_atoms(atoms)
 
-    print(f'{name}: There are {count_methyls(mofun_atoms)} methyl groups, {count_iso_carbon(mofun_atoms)} iso-carbons, {count_neo_carbons(mofun_atoms)} neo-carbons and {count_amines(mofun_atoms)} amines.')
+    print(f'{name}: There are {count_methyls(mofun_atoms)} methyl groups, {count_iso_carbon(mofun_atoms)} iso-carbons, {count_neo_carbons(mofun_atoms)} neo-carbons.')
+
+    print(f' there are {count_amines(mofun_atoms)} amines, {count_nitro(mofun_atoms)} nitro groups, {count_nitrate(mofun_atoms)} nitrates, {count_hydroxylamine(mofun_atoms)}, hydroxylamines, {count_hydrazine(mofun_atoms)} hydrazines, and {count_nitrile(mofun_atoms)} nitrile')
 
 
 if __name__ == '__main__':

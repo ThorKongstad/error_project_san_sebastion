@@ -54,7 +54,9 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     O2_er = dict(**{func.name: func.calc_O2_err() for func in functional_list})
     N2_er = dict(**{func.name: func.calc_N2_err() for func in functional_list})
 
-    for func in functional_list: func.correct_energies()
+    for func in functional_list:
+        try: func.correct_energies()
+        except: functional_list.remove(func)
 
     excel_file = xl.Workbook()
     work_sheet = excel_file.active

@@ -51,11 +51,14 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
         for i, func in enumerate(functional_list):
             missing_structures(func, need_structures)
 
-    O2_er = dict(**{func.name: func.calc_O2_err() for func in functional_list})
-    N2_er = dict(**{func.name: func.calc_N2_err() for func in functional_list})
+    O2_er = dict()
+    N2_er = dict()
 
     for func in functional_list:
-        try: func.correct_energies()
+        try:
+            O2_er.update({func.name: func.calc_O2_err()})
+            N2_er.update({func.name: func.calc_N2_err()})
+            func.correct_energies()
         except: functional_list.remove(func)
 
     excel_file = xl.Workbook()

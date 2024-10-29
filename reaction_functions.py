@@ -106,6 +106,21 @@ class Functional:
         reactant_BEE_enthalpy, product_BEE_enthalpy = tuple(sum(getattr(self, typ + '_bee')[name] * amount for typ, name, amount in getattr(reaction, reac_part)) for reac_part in ('reactants', 'products'))
         return product_BEE_enthalpy - reactant_BEE_enthalpy + correction
 
+    def calc_N2_err(self) -> float:
+        amonium_reaction = reaction((('molecule', 'nitrogen', 0.5), ('molecule', 'hydrogen', 1.5),), (('molecule', 'ammonia', 1),), -0.48)
+
+        return -2 * (self.calculate_reaction_enthalpy(amonium_reaction) - amonium_reaction.experimental_ref)
+
+    def calc_O2_err(self) -> float:
+#        peroxide_reaction = reaction((('molecule', 'oxygen', 1), ('molecule', 'hydrogen', 1),), (('molecule', 'peroxide', 1),), -1.09)
+        water_reaction = reaction((('molecule', 'oxygen', 0.5), ('molecule', 'hydrogen', 1),), (('molecule', 'water', 1),), -2.37)
+
+        return -2 * (self.calculate_reaction_enthalpy(water_reaction) - water_reaction.experimental_ref)
+
+    def correct_energies(self):
+        self.molecule['oxygen'] -= self.calc_O2_err()
+        self.molecule['nitrogen'] -= self.calc_N2_err()
+
 
 def get_needed_structures(reactions_seq: Sequence[reaction]):
     dictionary_of_needed_strucs = {'molecule': [], 'slab': [], 'adsorbate': []}

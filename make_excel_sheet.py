@@ -51,18 +51,27 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
         for i, func in enumerate(functional_list):
             missing_structures(func, need_structures)
 
+    O2_er = dict(**{func.name: func.calc_O2_err() for func in functional_list})
+    N2_er = dict(**{func.name: func.calc_N2_err() for func in functional_list})
+
+    for func in functional_list: func.correct_energies()
+
     excel_file = xl.Workbook()
     work_sheet = excel_file.active
     work_sheet.title = 'energies'
     deviation_sheet = excel_file.create_sheet('deviations')
     formation_sheet = excel_file.create_sheet('formation')
     formation_sheet_deviation = excel_file.create_sheet('formation_deviation')
+    correction_sheet = excel_file.create_sheet('corrections')
 
     for i, func in enumerate(functional_list):
-        try:
-            for sheet in (work_sheet, deviation_sheet, formation_sheet, formation_sheet_deviation):
-                sheet.cell(1, i+2, func.name)
-        except: pass
+        for sheet in (work_sheet, deviation_sheet, formation_sheet, formation_sheet_deviation, correction_sheet):
+            sheet.cell(1, i+2, func.name)
+            correction_sheet.cell(2, 2, O2_er[func.name])
+            correction_sheet.cell(2, 2, N2_er[func.name])
+    correction_sheet.cell(2, 1, 'O2 error')
+    correction_sheet.cell(3, 1, 'N2 error')
+
     work_sheet.cell(1, len(functional_list) + 2, 'exp ref')
     formation_sheet.cell(1, len(functional_list) + 2, 'exp ref')
 

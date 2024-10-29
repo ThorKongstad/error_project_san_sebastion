@@ -1,6 +1,7 @@
 import argparse
 import sys
 import pathlib
+from copy import copy
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 from error_project_san_sebastion import build_pd
@@ -54,7 +55,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     O2_er = dict()
     N2_er = dict()
 
-    for func in functional_list:
+    for func in copy(functional_list):
         try:
             O2_er.update({func.name: func.calc_O2_err()})
             N2_er.update({func.name: func.calc_N2_err()})
@@ -72,8 +73,8 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     for i, func in enumerate(functional_list):
         for sheet in (work_sheet, deviation_sheet, formation_sheet, formation_sheet_deviation, correction_sheet):
             sheet.cell(1, i+2, func.name)
-            correction_sheet.cell(2, 2, O2_er[func.name])
-            correction_sheet.cell(2, 2, N2_er[func.name])
+            correction_sheet.cell(2, i+2, O2_er[func.name])
+            correction_sheet.cell(2, i+2, N2_er[func.name])
     correction_sheet.cell(2, 1, 'O2 error')
     correction_sheet.cell(3, 1, 'N2 error')
 

@@ -113,7 +113,7 @@ class Functional:
 
     def calc_O2_err(self) -> float:
 #        peroxide_reaction = reaction((('molecule', 'oxygen', 1), ('molecule', 'hydrogen', 1),), (('molecule', 'peroxide', 1),), -1.09)
-        water_reaction = reaction((('molecule', 'oxygen', 0.5), ('molecule', 'hydrogen', 1),), (('molecule', 'water', 1),), -2.37)
+        water_reaction = reaction((('molecule', 'oxygen', 0.5), ('molecule', 'hydrogen', 1),), (('molecule', 'water', 1),), -2.51)
 
         return -2 * (self.calculate_reaction_enthalpy(water_reaction) - water_reaction.experimental_ref)
 

@@ -93,7 +93,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
         work_sheet.cell(i+2, len(functional_list) + 2, reac.experimental_ref)
     deviation_sheet.conditional_formatting.add(f'B2:{xl.utils.cell.get_column_letter(j+2)}{i+2}',
                                                ColorScaleRule(start_type='formula',
-                                                              start_value=f'MIN(B2:{xl.utils.cell.get_column_letter(j+2)}{i+2})',#f'=-MAX(-MIN(B2:{xl.utils.cell.get_column_letter(j+2)}{i+2});MAX(B2:{xl.utils.cell.get_column_letter(j+2)}{i+2}))',
+                                                              start_value=f'-MAX(-MIN($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2});MAX($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2}))',
                                                               start_color='AA0000',
 
                                                               mid_type='num',
@@ -101,7 +101,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
                                                               mid_color='FFFFFF',
 
                                                               end_type='formula',
-                                                              end_value=f'MAX(B2:{xl.utils.cell.get_column_letter(j+2)}{i+2})',#f'=MAX(-MIN(B2:{xl.utils.cell.get_column_letter(j)}{i});MAX(B2:{xl.utils.cell.get_column_letter(j+2)}{i+2}))',
+                                                              end_value=f'MAX(-MIN($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2});MAX($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2}))',
                                                               end_color='AA0000'
                                                               ))
 

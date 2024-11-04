@@ -94,7 +94,7 @@ nitrite_formation: Tuple[reaction, ...] = (
     reaction((('slab', 'graphene', 2), ('molecule', 'hydrogen', 4.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 1)), (('molecule', 'tert-butylnitrite', 1),), -1.78),
 )
 
-hydroxylamineamine_formation: Tuple[reaction, ...] = (
+hydroxylamine_formation: Tuple[reaction, ...] = (
     reaction((('molecule', 'hydrogen', 1.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 0.5)), (('molecule', 'hydroxylamine', 1),), -0.51),
     reaction((('slab', 'graphene', 2), ('molecule', 'hydrogen', 5.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 0.5)), (('molecule', 'n.n-diethylhydroxylamine', 1),), -1.26),
     reaction((('slab', 'graphene', 0.5), ('molecule', 'hydrogen', 2.5), ('molecule', 'nitrogen', 0.5), ('molecule', 'oxygen', 0.5)), (('molecule', 'o-methylhydroxylamine', 1),), -0.26),
@@ -158,7 +158,22 @@ small_molecule_formation: Tuple[reaction, ...] = (
     reaction((('slab', 'graphene', 0.5), ('molecule', 'oxygen', 0.5),), (('molecule', 'carbon-monoxide', 1),), -1.15),
 )
 
-all_formation_reactions = simple_alkane_formation + iso_alkane_formation + neo_alakane_formation + amine_formation + nitro_formation + nitrate_formation + nitrite_formation + hydroxylamineamine_formation + aromatic_formation + aniline_formation + hydrazine_formation + amide_formation + nitrile_formation + small_molecule_formation
+all_formation_reactions = simple_alkane_formation + iso_alkane_formation + neo_alakane_formation + amine_formation + nitro_formation + nitrate_formation + nitrite_formation + hydroxylamine_formation + aromatic_formation + aniline_formation + hydrazine_formation + amide_formation + nitrile_formation + small_molecule_formation
+all_formation_reactions_named = {
+    'Simple alkanes': simple_alkane_formation,
+    'Branched alkanes (iso)': iso_alkane_formation,
+    'Branched alkanes (neo)': neo_alakane_formation,
+    'Amines': amine_formation,
+    'Nitrates': nitrate_formation,
+    'Nitrites': nitrite_formation,
+    'Hydroxylamines': hydroxylamine_formation,
+    'Aromatics': aromatic_formation,
+    'Anilines': aniline_formation,
+    'Hydrazines': hydrazine_formation,
+    'Amides': amide_formation,
+    'Nitriles': nitrile_formation,
+    'Small molecules': small_molecule_formation
+}
 
 ####
 simple_alkane_gaseous: Tuple[reaction, ...] = (
@@ -245,7 +260,7 @@ nitrite_gaseous: Tuple[reaction, ...] = (
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 9 / 2)), (('molecule', 'tert-butylnitrite', 1), ('molecule', 'oxygen', 15 / 4)), 13.13),
 )
 
-hydroxylamineamine_gaseous: Tuple[reaction, ...] = (
+hydroxylamine_gaseous: Tuple[reaction, ...] = (
     reaction((('molecule', 'nitric-oxide', 1), ('molecule', 'water', 3 / 2)), (('molecule', 'hydroxylamine', 1), ('molecule', 'oxygen', 3 / 4)), 3.31),
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 11 / 2)), (('molecule', 'n.n-diethylhydroxylamine', 1), ('molecule', 'oxygen', 19 / 4)), 16.16),
     reaction((('molecule', 'carbon-monoxide', 1), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 5 / 2)), (('molecule', 'o-methylhydroxylamine', 1), ('molecule', 'oxygen', 7 / 4)), 6.21),
@@ -304,4 +319,18 @@ nitrile_gaseous: Tuple[reaction, ...] = (
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', '2-methylpropanenitrile', 1), ('molecule', 'oxygen', 17 / 4)), 12.65),
 )
 
-all_gaseous_reactions = simple_alkane_gaseous + iso_alkane_gaseous + neo_alakane_gaseous + amine_gaseous + nitro_gaseous + nitrate_gaseous + nitrite_gaseous + hydroxylamineamine_gaseous + aromatic_gaseous + aniline_gaseouss + hydrazine_gaseous + amide_gaseous + nitrile_gaseous
+all_gaseous_reactions = simple_alkane_gaseous + iso_alkane_gaseous + neo_alakane_gaseous + amine_gaseous + nitro_gaseous + nitrate_gaseous + nitrite_gaseous + hydroxylamine_gaseous + aromatic_gaseous + aniline_gaseouss + hydrazine_gaseous + amide_gaseous + nitrile_gaseous
+all_gaseous_reactions_named = {
+    'Simple alkanes': simple_alkane_gaseous,
+    'Branched alkanes (iso)': iso_alkane_gaseous,
+    'Branched alkanes (neo)': neo_alakane_gaseous,
+    'Amines': amine_gaseous,
+    'Nitrates': nitrate_gaseous,
+    'Nitrites': nitrite_gaseous,
+    'Hydroxylamines': hydroxylamine_gaseous,
+    'Aromatics': aromatic_gaseous,
+    'Anilines': aniline_gaseous,
+    'Hydrazines': hydrazine_gaseous,
+    'Amides': amide_gaseous,
+    'Nitriles': nitrile_gaseous,
+}

@@ -94,7 +94,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     for name, reactions in all_gaseous_reactions_named.items():
         for sheet in [work_sheet, deviation_sheet]:
             sheet.cell(next_row, start_of_data - 2, name)
-            for j in range(len(functional_list)+start_of_data+1): sheet.cell(next_row, j).border = upper_border
+            for j in range(len(functional_list)+start_of_data+1): sheet.cell(next_row, j + 1).border = upper_border
         for i, reac in enumerate(reactions):
             for sheet in [work_sheet, deviation_sheet]: sheet.cell(next_row, start_of_data - 1, reac.products[0].name)
             for j, func in enumerate(functional_list):
@@ -124,8 +124,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     for name, reactions in all_formation_reactions_named.items():
         for sheet in [formation_sheet, formation_sheet_deviation]:
             sheet.cell(next_row, start_of_data - 2, name)
-            for j in range(len(functional_list)+start_of_data+1): sheet.cell(next_row, j).border = upper_border
-
+            for j in range(len(functional_list)+start_of_data+1): sheet.cell(next_row, j + 1).border = upper_border
         for i, reac in enumerate(reactions):
             for sheet in [formation_sheet, formation_sheet_deviation]: sheet.cell(next_row, start_of_data - 1, reac.products[0].name)
             for j, func in enumerate(functional_list):

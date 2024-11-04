@@ -280,7 +280,7 @@ aromatic_gaseous: Tuple[reaction, ...] = (
     reaction((('molecule', 'carbon-monoxide', 10), ('molecule', 'water', 7)), (('molecule', 'isobutylbenzene', 1), ('molecule', 'oxygen', 17 / 2)), 28.77),
 )
 
-aniline_gaseouss: Tuple[reaction, ...] = (
+aniline_gaseous: Tuple[reaction, ...] = (
     reaction((('molecule', 'carbon-monoxide', 6), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', 'aniline', 1), ('molecule', 'oxygen', 21 / 4)), 15.61),
     reaction((('molecule', 'carbon-monoxide', 7), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 9 / 2)), (('molecule', '2-methylaniline', 1), ('molecule', 'oxygen', 25 / 4)), 18.94),
     reaction((('molecule', 'carbon-monoxide', 7), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 9 / 2)), (('molecule', 'n-methylaniline', 1), ('molecule', 'oxygen', 25 / 4)), 19.22),
@@ -319,7 +319,7 @@ nitrile_gaseous: Tuple[reaction, ...] = (
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 7 / 2)), (('molecule', '2-methylpropanenitrile', 1), ('molecule', 'oxygen', 17 / 4)), 12.65),
 )
 
-all_gaseous_reactions = simple_alkane_gaseous + iso_alkane_gaseous + neo_alakane_gaseous + amine_gaseous + nitro_gaseous + nitrate_gaseous + nitrite_gaseous + hydroxylamine_gaseous + aromatic_gaseous + aniline_gaseouss + hydrazine_gaseous + amide_gaseous + nitrile_gaseous
+all_gaseous_reactions = simple_alkane_gaseous + iso_alkane_gaseous + neo_alakane_gaseous + amine_gaseous + nitro_gaseous + nitrate_gaseous + nitrite_gaseous + hydroxylamine_gaseous + aromatic_gaseous + aniline_gaseous + hydrazine_gaseous + amide_gaseous + nitrile_gaseous
 all_gaseous_reactions_named = {
     'Simple alkanes': simple_alkane_gaseous,
     'Branched alkanes (iso)': iso_alkane_gaseous,

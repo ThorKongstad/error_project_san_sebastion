@@ -6,11 +6,12 @@ from copy import copy
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 from error_project_san_sebastion import build_pd
 from error_project_san_sebastion.reaction_functions import Functional, get_needed_structures
-from error_project_san_sebastion.reactions import all_gaseous_reactions, all_formation_reactions
+from error_project_san_sebastion.reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
 
 import pandas as pd
 import openpyxl as xl
 from openpyxl.formatting.rule import ColorScaleRule
+from openpyxl.styles.borders import Border, Side, BORDER_THIN
 
 
 def missing_structures(functional: Functional, needed_strcutures: dict):
@@ -71,29 +72,42 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     formation_sheet_deviation = excel_file.create_sheet('formation_deviation')
     correction_sheet = excel_file.create_sheet('corrections')
 
+    upper_border = Border(
+        top=Side(border_style=BORDER_THIN, color='00000000'),
+        )
+
+    start_of_data = 3
+
     for i, func in enumerate(functional_list):
         for sheet in (work_sheet, deviation_sheet, formation_sheet, formation_sheet_deviation, correction_sheet):
-            sheet.cell(1, i+2, func.name)
+            sheet.cell(1, i + start_of_data, func.name)
             correction_sheet.cell(2, i+2, O2_er[func.name])
             correction_sheet.cell(3, i+2, N2_er[func.name])
     correction_sheet.cell(2, 1, 'O2 error')
     correction_sheet.cell(3, 1, 'N2 error')
 
-    work_sheet.cell(1, len(functional_list) + 2, 'exp ref')
-    formation_sheet.cell(1, len(functional_list) + 2, 'exp ref')
+    work_sheet.cell(1, len(functional_list) + start_of_data, 'exp ref')
+    formation_sheet.cell(1, len(functional_list) + start_of_data, 'exp ref')
 
-    for i, reac in enumerate(all_gaseous_reactions):
-        work_sheet.cell(i+2, 1, reac.products[0].name)
-        deviation_sheet.cell(i+2, 1, reac.products[0].name)
-        for j, func in enumerate(functional_list):
-            try:
-                work_sheet.cell(i+2, j+2, func.calculate_reaction_enthalpy(reac))
-                deviation_sheet.cell(i+2, j+2, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
-            except: pass
-        work_sheet.cell(i+2, len(functional_list) + 2, reac.experimental_ref)
-    deviation_sheet.conditional_formatting.add(f'B2:{xl.utils.cell.get_column_letter(j+2)}{i+2}',
+    next_row = 2
+
+    for name, reactions in all_gaseous_reactions_named:
+        for sheet in [work_sheet, deviation_sheet]:
+            sheet.cell(next_row, start_of_data - 2, name)
+            for j in range(len(functional_list)+start_of_data+1): sheet.cell(next_row, j).border = upper_border
+        for i, reac in enumerate(reactions):
+            for sheet in [work_sheet, deviation_sheet]: sheet.cell(next_row, start_of_data - 1, reac.products[0].name)
+            for j, func in enumerate(functional_list):
+                try:
+                    work_sheet.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac))
+                    deviation_sheet.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
+                except: pass
+            work_sheet.cell(next_row, len(functional_list) + start_of_data, reac.experimental_ref)
+            next_row += 1
+
+    deviation_sheet.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(start_of_data)}${start_of_data}:${xl.utils.cell.get_column_letter(j+start_of_data)}${next_row - 1}'),
                                                ColorScaleRule(start_type='formula',
-                                                              start_value='-MAX(3,4)',#f'-MAX(-MIN($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2});MAX($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2}))',
+                                                              start_value=f'-MAX(-MIN({cond_zone}),MAX({cond_zone}))',
                                                               start_color='AA0000',
 
                                                               mid_type='num',
@@ -101,22 +115,29 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
                                                               mid_color='FFFFFF',
 
                                                               end_type='formula',
-                                                              end_value='MAX(3,4)',#f'MAX(-MIN($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2});MAX($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2}))',
+                                                              end_value=f'MAX(-MIN({cond_zone}),MAX({cond_zone}))',
                                                               end_color='AA0000'
                                                               ))
 
-    for i, reac in enumerate(all_formation_reactions):
-        formation_sheet.cell(i+2, 1, reac.products[0].name)
-        formation_sheet_deviation.cell(i+2, 1, reac.products[0].name)
-        for j, func in enumerate(functional_list):
-            try:
-                formation_sheet.cell(i+2, j+2, func.calculate_reaction_enthalpy(reac))
-                formation_sheet_deviation.cell(i+2, j+2, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
-            except: pass
-        formation_sheet.cell(i+2, len(functional_list) + 2, reac.experimental_ref)
-    formation_sheet_deviation.conditional_formatting.add(f'B2:{xl.utils.cell.get_column_letter(j+2)}{i+2}',
+    next_row = 2
+
+    for name, reactions in all_formation_reactions_named:
+        for sheet in [formation_sheet, formation_sheet_deviation]:
+            sheet.cell(next_row, start_of_data - 2, name)
+            for j in range(len(functional_list)+start_of_data+1): sheet.cell(next_row, j).border = upper_border
+
+        for i, reac in enumerate(reactions):
+            for sheet in [formation_sheet, formation_sheet_deviation]: sheet.cell(next_row, start_of_data - 1, reac.products[0].name)
+            for j, func in enumerate(functional_list):
+                try:
+                    formation_sheet.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac))
+                    formation_sheet_deviation.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
+                except: pass
+            formation_sheet.cell(next_row, len(functional_list) + start_of_data, reac.experimental_ref)
+            next_row += 1
+    formation_sheet_deviation.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(start_of_data)}${start_of_data}:${xl.utils.cell.get_column_letter(j+start_of_data)}${next_row - 1}'),
                                                ColorScaleRule(start_type='formula',
-                                                              start_value=f'-MAX(-MIN($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2}),MAX($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2}))',
+                                                              start_value=f'-MAX(-MIN({cond_zone}),MAX({cond_zone}))',
                                                               start_color='AA0000',
 
                                                               mid_type='num',
@@ -124,7 +145,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
                                                               mid_color='FFFFFF',
 
                                                               end_type='formula',
-                                                              end_value=f'MAX(-MIN($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2}),MAX($B$2:${xl.utils.cell.get_column_letter(j+2)}${i+2}))',
+                                                              end_value=f'MAX(-MIN({cond_zone}),MAX({cond_zone}))',
                                                               end_color='AA0000'
                                                               ))
 

@@ -39,7 +39,8 @@ def main(db_id: int, db_dir: str):
     if functional in ['tpss', 'm06l']: os.environ['VASP_PP_PATH'] = '/home-nas/waaguest/VASP_PP_031024'  #call(['export', 'VASP_PP_PATH=/home-nas/waaguest/VASP_PP_031024'])
 
     if all([
-       name == 'oxygen'
+        name == 'oxygen',
+        name == 'nitric-oxide'
             ]):
         spin = 2
     else:
@@ -68,8 +69,8 @@ def main(db_id: int, db_dir: str):
                 # npar=4,  # number of bands that are treated in parallel, sqrt of n of cores
                 lcharg=False,
                 lwave=False,
-                algo='A'
-    )
+                algo='A',
+                )
 
     atoms.calc = calc
 

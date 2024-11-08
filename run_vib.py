@@ -11,7 +11,7 @@ from subprocess import call
 from typing import NoReturn
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-from scripts_for_molecule_database_calculations import update_db, folder_exist, sanitize, ends_with
+from error_project_san_sebastion import update_db, folder_exist, sanitize, ends_with
 
 import ase.db as db
 from ase.vibrations import Vibrations
@@ -61,7 +61,7 @@ def main(db_id: int, clean_old: bool = True, db_dir: str = 'molreact.db'):
     if functional in ['tpss', 'm06l']: os.environ[
         'VASP_PP_PATH'] = '/home-nas/waaguest/VASP_PP_031024'  # call(['export', 'VASP_PP_PATH=/home-nas/waaguest/VASP_PP_031024'])
 
-    if all([
+    if any([
         name == 'oxygen',
         name == 'nitric-oxide',
             ]):

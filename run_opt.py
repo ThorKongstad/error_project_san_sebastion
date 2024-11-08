@@ -38,7 +38,7 @@ def main(db_id: int, db_dir: str):
 
     if functional in ['tpss', 'm06l']: os.environ['VASP_PP_PATH'] = '/home-nas/waaguest/VASP_PP_031024'  #call(['export', 'VASP_PP_PATH=/home-nas/waaguest/VASP_PP_031024'])
 
-    if all([
+    if any([
         name == 'oxygen',
         name == 'nitric-oxide'
             ]):

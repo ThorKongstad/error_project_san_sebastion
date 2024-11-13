@@ -37,7 +37,7 @@ def clean_old_files(functional_folder, file_name):
         call(['mv', '-f', f"{ends_with(functional_folder, '/')}{old_folder}", f"{file_dont_exist(old_folder, f'{functional_folder}/old_vibs', rm_flags='-r', return_path=True)}"])
 
 
-def main(db_id: int, clean_old: bool = True, db_dir: str = 'molreact.db'):
+def main(db_id: int, db_dir: str = 'molreact.db'):
     # read from  database
     if not os.path.basename(db_dir) in os.listdir(db_path if len(db_path := os.path.dirname(db_dir)) > 0 else '.'): raise FileNotFoundError("Can't find database")
     with db.connect(db_dir) as db_obj:
@@ -101,8 +101,7 @@ def main(db_id: int, clean_old: bool = True, db_dir: str = 'molreact.db'):
 
     calc.calculate(atoms)
     freq, ifreq = calc.read_vib_freq()
-    zpe = sum(freq)
-
+    zpe = sum(freq) / 1000
 
     if world.rank == 0:
         data.update(dict(frequencies=freq, i_frequencies=ifreq))
@@ -123,7 +122,7 @@ def main(db_id: int, clean_old: bool = True, db_dir: str = 'molreact.db'):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('data_base_id', type=int)
-    parser.add_argument('-db', '--database', help='directory to the database, if not stated will look for molreact.db in pwd.', default='molreact.db')
+    parser.add_argument('database', help='directory to the database, if not stated will look for molreact.db in pwd.')
     args = parser.parse_args()
 
     main(args.data_base_id, db_dir=args.database)

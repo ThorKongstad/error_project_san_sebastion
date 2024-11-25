@@ -3,7 +3,7 @@ import os
 import sys
 import pathlib
 
-sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
+sys.path.insert(0, str(pathlib.Path(__file__).parent.parent.parent))
 from error_project_san_sebastion import sanitize, folder_exist, update_db
 #from error_project_san_sebastion.functional_groups import count_methyls, count_amines, count_iso_carbon, count_neo_carbons
 
@@ -19,7 +19,7 @@ import numpy as np
 #import mofun
 
 
-def main(db_id: int, db_dir: str):
+def main(db_id: int, db_dir: str, remove: float = 5):
     # read from  database
     if not os.path.basename(db_dir) in os.listdir(db_path if len(db_path := os.path.dirname(db_dir)) > 0 else '.'): raise FileNotFoundError("Can't find database")
     with db.connect(db_dir) as db_obj:
@@ -28,9 +28,11 @@ def main(db_id: int, db_dir: str):
         atoms: Atoms = row.toatoms()
         name = row.get('name')
 
-    #scaled_pos = atoms.get_scaled_positions()
-    atoms.set_cell([[15, 0, 0], [0, 15, 0], [0, 0, 15]], scale_atoms=True)
-    #atoms.set_scaled_positions(scaled_pos)
+    org_height = atoms.cell.cellpar()[2]
+    atoms.set_cell([[atoms.cell.cellpar()[0], 0, 0], [0, atoms.cell.cellpar()[1], 0], [0, 0, atoms.cell.cellpar()[2] - 5]], scale_atoms=False)
+    for atom in atoms:
+        if atom.position[2] >= org_height / 2:
+            atom.translate([0, 0, -remove])
 
     update_db(db_dir, dict(id=db_id, atoms=atoms))
 

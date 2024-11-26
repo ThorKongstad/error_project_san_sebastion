@@ -13,7 +13,7 @@ from reactions import all_gaseous_reactions, all_formation_reactions, all_gaseou
 #from error_project_san_sebastion.error_decomposition import simple_decomposition
 from error_decomposition import simple_decomposition, lstsq_decomposition
 #from error_project_san_sebastion.manual_functional_groups import molecule_functional_dict
-from manual_functional_groups import molecule_functional_dict
+from manual_functional_groups_revised import molecule_functional_dict
 
 import pandas as pd
 import openpyxl as xl

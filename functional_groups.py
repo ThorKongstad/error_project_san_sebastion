@@ -1,19 +1,6 @@
-import argparse
-import os
-import sys
-import pathlib
 from copy import deepcopy as dcp
 import numpy as np
-
-sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-from error_project_san_sebastion import sanitize, folder_exist
-
-from ase.io import read
-import ase.db as db
 from ase import Atoms
-#from ase.data.pubchem import pubchem_atoms_search
-#from ase.build import molecule
-# import numpy as np
 import mofun
 
 

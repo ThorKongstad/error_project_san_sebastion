@@ -4,9 +4,16 @@ import pathlib
 from copy import copy
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-from error_project_san_sebastion import build_pd
-from error_project_san_sebastion.reaction_functions import Functional, get_needed_structures
-from error_project_san_sebastion.reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
+#from error_project_san_sebastion import build_pd
+from . import build_pd
+#from error_project_san_sebastion.reaction_functions import Functional, get_needed_structures
+from reaction_functions import Functional, get_needed_structures
+#from error_project_san_sebastion.reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
+from reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
+#from error_project_san_sebastion.error_decomposition import simple_decomposition
+from error_decomposition import simple_decomposition, lstsq_decomposition
+#from error_project_san_sebastion.manual_functional_groups import molecule_functional_dict
+from manual_functional_groups import molecule_functional_dict
 
 import pandas as pd
 import openpyxl as xl
@@ -79,10 +86,10 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     start_of_data = 3
 
     for i, func in enumerate(functional_list):
-        for sheet in (work_sheet, deviation_sheet, formation_sheet, formation_sheet_deviation, correction_sheet):
-            sheet.cell(1, i + start_of_data, func.name)
-            correction_sheet.cell(2, i+2, O2_er[func.name])
-            correction_sheet.cell(3, i+2, N2_er[func.name])
+        for sheet in (work_sheet, deviation_sheet, formation_sheet, formation_sheet_deviation): sheet.cell(1, i + start_of_data, func.name)
+        correction_sheet.cell(1, i + start_of_data - 1, func.name)
+        correction_sheet.cell(2, i+2, O2_er[func.name])
+        correction_sheet.cell(3, i+2, N2_er[func.name])
     correction_sheet.cell(2, 1, 'O2 error')
     correction_sheet.cell(3, 1, 'N2 error')
 
@@ -148,6 +155,31 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
                                                               end_color='AA0000'
                                                               ))
 
+    reac_group_names = {'Simple alkanes': 'methyl_carbons', 'Branched alkanes (iso)': 'iso_carbons', 'Branched alkanes (neo)': 'neo_carbons', 'Amines': 'amines', 'Nitros': 'nitro', 'Nitrates': 'nitrate', 'Nitrites': 'nitrite', 'Hydroxylamines': 'hydroxylamine', 'Aromatics': 'phenyl', 'Anilines': 'aniline', 'Hydrazines': 'hydrazine', 'Amides': 'amide', 'Nitriles': 'nitrile'}
+
+    for i, func in enumerate(functional_list):
+        try:
+            corrections = simple_decomposition(func, molecule_functional_dict)
+            for j, (group_name, val) in enumerate(corrections.items()):
+                if correction_sheet.cell(1, 5 + j).value is None: correction_sheet.cell(1, 5 + j, group_name)
+                correction_sheet.cell(2 + i, 5 + j, val)
+        except: pass
+
+    correction_sheet_linalg = excel_file.create_sheet('corrections linalg')
+    correction_sheet_linalg.cell(1, 2, 'residual')
+    start_of_linalg_data = 5
+
+    for i, func in enumerate(functional_list):
+        try:
+            correction_sheet_linalg.cell(1 + i, 1, func.name)
+            corrections, residual = lstsq_decomposition(func, all_gaseous_reactions, molecule_functional_dict)
+            correction_sheet_linalg.cell(1 + i, 2, residual)
+            for j, (group_name, corr_key) in enumerate(reac_group_names.items()):
+                if correction_sheet_linalg.cell(1, start_of_linalg_data + j).value is None: correction_sheet_linalg.cell(1, start_of_linalg_data + j, group_name)
+                correction_sheet_linalg.cell(2 + i, start_of_linalg_data + j, corrections[corr_key])
+        except: pass
+
+
     excel_file.save('reaction_results.xlsx')
 
 
@@ -159,4 +191,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(args.molecule_db_directory, args.solid_db_directory, args.verbose)
-

@@ -5,10 +5,10 @@ from itertools import chain
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 #from error_project_san_sebastion import build_pd
-#from error_project_san_sebastion.reaction_functions import Functional, reaction, get_needed_structures
-from reaction_functions import Functional, reaction, get_needed_structures
-#from error_project_san_sebastion.reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
-from reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
+from error_project_san_sebastion.reaction_functions import Functional, reaction, get_needed_structures
+#from reaction_functions import Functional, reaction, get_needed_structures
+from error_project_san_sebastion.reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
+#from reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
 
 import numpy as np
 import pandas as pd

@@ -2,9 +2,9 @@ import sys
 import pathlib
 from typing import Tuple
 
-#sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-#from error_project_san_sebastion.reaction_functions import reaction
-from .reaction_functions import reaction
+sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
+from error_project_san_sebastion.reaction_functions import reaction
+#from .reaction_functions import reaction
 
 #reaction((('',),), (('',),), experimental value)
 # https://doi.org/10.1002/cctc.202100125

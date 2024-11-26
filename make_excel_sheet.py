@@ -5,15 +5,15 @@ from copy import copy
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 #from error_project_san_sebastion import build_pd
-from . import build_pd
-#from error_project_san_sebastion.reaction_functions import Functional, get_needed_structures
-from reaction_functions import Functional, get_needed_structures
-#from error_project_san_sebastion.reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
-from reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
-#from error_project_san_sebastion.error_decomposition import simple_decomposition
-from error_decomposition import simple_decomposition, lstsq_decomposition
-#from error_project_san_sebastion.manual_functional_groups import molecule_functional_dict
-from manual_functional_groups_revised import molecule_functional_dict
+#from . import build_pd
+from error_project_san_sebastion.reaction_functions import Functional, get_needed_structures
+#from .reaction_functions import Functional, get_needed_structures
+from error_project_san_sebastion.reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
+#from .reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
+from error_project_san_sebastion.error_decomposition import simple_decomposition
+#from .error_decomposition import simple_decomposition, lstsq_decomposition
+from error_project_san_sebastion.manual_functional_groups_revised import molecule_functional_dict
+#from .manual_functional_groups_revised import molecule_functional_dict
 
 import pandas as pd
 import openpyxl as xl
@@ -38,7 +38,6 @@ def missing_structures(functional: Functional, needed_strcutures: dict):
             print('    slab:')
             print(missing_slab)
         print()
-
 
 
 def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = False):

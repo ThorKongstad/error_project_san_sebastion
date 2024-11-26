@@ -4,13 +4,13 @@ import pathlib
 from copy import copy
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-#from error_project_san_sebastion import build_pd
+from error_project_san_sebastion import build_pd
 #from . import build_pd
 from error_project_san_sebastion.reaction_functions import Functional, get_needed_structures
 #from .reaction_functions import Functional, get_needed_structures
 from error_project_san_sebastion.reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
 #from .reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
-from error_project_san_sebastion.error_decomposition import simple_decomposition
+from error_project_san_sebastion.error_decomposition import simple_decomposition, lstsq_decomposition
 #from .error_decomposition import simple_decomposition, lstsq_decomposition
 from error_project_san_sebastion.manual_functional_groups_revised import molecule_functional_dict
 #from .manual_functional_groups_revised import molecule_functional_dict
@@ -165,14 +165,14 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
         except: pass
 
     correction_sheet_linalg = excel_file.create_sheet('corrections linalg')
-    correction_sheet_linalg.cell(1, 2, 'residual')
+    correction_sheet_linalg.cell(2, 1, 'residual')
     start_of_linalg_data = 5
 
     for i, func in enumerate(functional_list):
         try:
-            correction_sheet_linalg.cell(1 + i, 1, func.name)
+            correction_sheet_linalg.cell(1, 2 + i, func.name)
             corrections, residual = lstsq_decomposition(func, all_gaseous_reactions, molecule_functional_dict)
-            correction_sheet_linalg.cell(1 + i, 2, residual)
+            correction_sheet_linalg.cell(2, 2 + i, residual)
             for j, (group_name, corr_key) in enumerate(reac_group_names.items()):
                 if correction_sheet_linalg.cell(1, start_of_linalg_data + j).value is None: correction_sheet_linalg.cell(1, start_of_linalg_data + j, group_name)
                 correction_sheet_linalg.cell(2 + i, start_of_linalg_data + j, corrections[corr_key])

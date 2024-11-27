@@ -42,7 +42,7 @@ def build_error_matrix(reactions: list[reaction], functional_groups: dict[str, d
 
 
 def lstsq_decomposition(functional_obj: Functional, reactions: list[reaction], functional_groups: dict[str, dict[str, int]]) -> tuple[dict[str, float], float]:
-    deviations = np.array([None] * len(reactions))
+    deviations = np.array([np.nan] * len(reactions))
     for i, reac in enumerate(reactions):
         try: deviations[i] = functional_obj.calculate_reaction_enthalpy(reac) - reac.experimental_ref
         except: pass

@@ -175,8 +175,8 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
             corrections, residual = lstsq_decomposition(func, all_gaseous_reactions, molecule_functional_dict)
             correction_sheet_linalg.cell(2, 2 + i, residual)
             for j, (group_name, corr_key) in enumerate(reac_group_names.items()):
-                if correction_sheet_linalg.cell(1, start_of_linalg_data + j).value is None: correction_sheet_linalg.cell(1, start_of_linalg_data + j, group_name)
-                correction_sheet_linalg.cell(2 + i, start_of_linalg_data + j, corrections[corr_key])
+                if correction_sheet_linalg.cell( start_of_linalg_data + j, 1).value is None: correction_sheet_linalg.cell( start_of_linalg_data + j, 1, group_name)
+                correction_sheet_linalg.cell(start_of_linalg_data + j, 2 + i,  corrections[corr_key])
         except: pass
 
 

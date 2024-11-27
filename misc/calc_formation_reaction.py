@@ -4,7 +4,7 @@ import pathlib
 from copy import copy
 import traceback
 
-sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
+sys.path.insert(0, str(pathlib.Path(__file__).parent.parent.parent))
 from error_project_san_sebastion import build_pd
 #from . import build_pd
 from error_project_san_sebastion.reaction_functions import Functional, get_needed_structures

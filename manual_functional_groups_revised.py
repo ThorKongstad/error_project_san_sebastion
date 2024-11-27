@@ -69,7 +69,7 @@ molecule_functional_dict = {
     '1.2.3-propanetriol-trinitrate': {'nitrate': 3, 'methyl_carbons': 2, 'iso_carbons': 1}, # was 3 methyl_carbons
 
 #nitrites
-    'nitrous-acid': {'nitrite': 1},
+    'nitrous-acid-trans': {'nitrite': 1},
     'methyl-nitrite': {'nitrite': 1, 'methyl_carbons': 1},
     'ethyl-nitrite': {'nitrite': 1, 'methyl_carbons': 2},
     'propyl-nitrite': {'nitrite': 1, 'methyl_carbons': 3},

@@ -11,6 +11,7 @@ from error_project_san_sebastion.reactions import all_gaseous_reactions, all_for
 #from reactions import all_gaseous_reactions, all_formation_reactions, all_gaseous_reactions_named, all_formation_reactions_named
 
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 from scipy.linalg import lstsq
 
@@ -55,7 +56,7 @@ def lstsq_decomposition(functional_obj: Functional, reactions: list[reaction], f
     return errors, residual
 
 
-def remove_nan_error_matrix(decomposition_matrix: pd.DataFrame, deviation_vector: np.typing.ArrayLike) -> tuple[pd.DataFrame, np.typing.ArrayLike]:
+def remove_nan_error_matrix(decomposition_matrix: pd.DataFrame, deviation_vector: npt.NDArray) -> tuple[pd.DataFrame, npt.NDArray]:
     decomposition_matrix_filtered = decomposition_matrix.loc[~np.isnan(deviation_vector)] #lambda x: deviation_vector[x['id']] is not None)
     deviation_vector_filtered = deviation_vector[~np.isnan(deviation_vector)]
     return decomposition_matrix_filtered, deviation_vector_filtered
@@ -97,6 +98,6 @@ def simple_decomposition(functional_obj: Functional, functional_groups: dict[str
     errors = {}
     for err_foc, chem_name in zip(error_foci, reaction_groups):
         errors.update({
-            err_foc: np.mean([(functional_obj.calculate_reaction_enthalpy(reac) - reac.experimental_ref - sum(errors[err] * functional_groups[reac.product[0]][err] for err in errors.keys() if err in functional_groups.keys())) / functional_groups[reac.product[0]][err_foc] for reac in all_gaseous_reactions_named[chem_name]])
+            err_foc: np.mean([(functional_obj.calculate_reaction_enthalpy(reac) - reac.experimental_ref - sum(errors[err] * functional_groups[reac.products[0].name][err] for err in errors.keys() if err in functional_groups[reac.products[0].name].keys())) / functional_groups[reac.products[0].name][err_foc] for reac in all_gaseous_reactions_named[chem_name]])
         })
     return errors

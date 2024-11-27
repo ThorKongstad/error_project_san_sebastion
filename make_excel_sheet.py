@@ -2,6 +2,7 @@ import argparse
 import sys
 import pathlib
 from copy import copy
+import traceback
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 from error_project_san_sebastion import build_pd
@@ -160,8 +161,8 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
         try:
             corrections = simple_decomposition(func, molecule_functional_dict)
             for j, (group_name, val) in enumerate(corrections.items()):
-                if correction_sheet.cell(1, 5 + j).value is None: correction_sheet.cell(1, 5 + j, group_name)
-                correction_sheet.cell(2 + i, 5 + j, val)
+                if correction_sheet.cell(5 + j, 1).value is None: correction_sheet.cell(5 + j, 1, group_name)
+                correction_sheet.cell(5 + j, 2 + i, val)
         except: pass
 
     correction_sheet_linalg = excel_file.create_sheet('corrections linalg')

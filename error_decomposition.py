@@ -98,6 +98,8 @@ def simple_decomposition(functional_obj: Functional, functional_groups: dict[str
     errors = {}
     for err_foc, chem_name in zip(error_foci, reaction_groups):
         errors.update({
-            err_foc: np.mean([(functional_obj.calculate_reaction_enthalpy(reac) - reac.experimental_ref - sum(errors[err] * functional_groups[reac.products[0].name][err] for err in errors.keys() if err in functional_groups[reac.products[0].name].keys())) / functional_groups[reac.products[0].name][err_foc] for reac in all_gaseous_reactions_named[chem_name]])
+            err_foc: np.mean([
+                (functional_obj.calculate_reaction_enthalpy(reac) - reac.experimental_ref - sum(errors[err] * functional_groups[reac.products[0].name][err] for err in errors.keys() if err in functional_groups[reac.products[0].name].keys()))
+                / functional_groups[reac.products[0].name][err_foc] for reac in all_formation_reactions_named[chem_name]])
         })
     return errors

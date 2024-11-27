@@ -71,8 +71,13 @@ def main(molecule_database_dir: str, solid_database_dir: str, target_molecule: s
             func.correct_energies()
         except: functional_list.remove(func)
 
-    react = list(filter(lambda r: r.products.name == target_molecule, all_formation_reactions))[0]
-    result = {xc.name: xc.calculate_reaction_enthalpy(react) for xc in functional_set}
+    react = list(filter(lambda r: r.products[0].name == target_molecule, all_formation_reactions))[0]
+    result = {}
+
+    for xc in functional_list:
+        try:
+            result.update({xc.name: xc.calculate_reaction_enthalpy(react)})
+        except: pass
 
     print(f'formation energy is: {result}')
 

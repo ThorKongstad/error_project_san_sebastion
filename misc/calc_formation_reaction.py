@@ -79,13 +79,13 @@ def main(molecule_database_dir: str, solid_database_dir: str, target_molecule: s
     for xc in functional_list:
         try:
             result.update({xc.name: xc.calculate_reaction_enthalpy(react)})
-            reactants.update({rea.name: getattr(xc, rea.type)[rea.name] for rea in react.reactant})
-            products.update({pro.name: getattr(xc, pro.type)[pro.name] for pro in react.reactant})
+            reactants.update({f'{xc.name}_' + rea.name: getattr(xc, rea.type)[rea.name] for rea in react.reactants})
+            products.update({f'{xc.name}_' + pro.name: getattr(xc, pro.type)[pro.name] for pro in react.products})
         except: pass
 
     print(f'formation energy is: {result}')
-    print(f'reactant energies are {reactants}')
-    print(f'product energies are {products}')
+    print(f'reactant enthalpies are {reactants}')
+    print(f'product enthalpies are {products}')
 
 
 if __name__ == '__main__':

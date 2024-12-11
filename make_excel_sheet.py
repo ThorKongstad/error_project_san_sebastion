@@ -173,15 +173,16 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
 
     for i, func in enumerate(functional_list):
         try:
-            for sheet in [correction_sheet_linalg,correction_sheet_gas_linalg,correction_sheet_form_linalg]: sheet.cell(1, 2 + i, func.name)
+            for sheet in [correction_sheet_linalg,]: sheet.cell(1, 2 + i, func.name)
+            for sheet in [correction_sheet_gas_linalg, correction_sheet_form_linalg]: sheet.cell(1, 3 + i, func.name)
             corrections, residual = lstsq_decomposition(func, all_formation_reactions, molecule_functional_dict)
             correction_sheet_linalg.cell(2, 2 + i, residual)
             for j, (group_name, corr_key) in enumerate(reac_group_names.items()):
                 if correction_sheet_linalg.cell(start_of_linalg_data + j, 1).value is None: correction_sheet_linalg.cell( start_of_linalg_data + j, 1, group_name)
                 correction_sheet_linalg.cell(start_of_linalg_data + j, 2 + i,  corrections[corr_key])
-            for sheet, reac_group_dict in ((correction_sheet_gas_linalg, all_gaseous_reactions_named.items), (correction_sheet_form_linalg, all_formation_reactions_named.items)):
+            for sheet, reac_group_dict in ((correction_sheet_gas_linalg, all_gaseous_reactions_named), (correction_sheet_form_linalg, all_formation_reactions_named)):
                 next_row = 2
-                for reac_group_name, reac_list in reac_group_dict.items:
+                for reac_group_name, reac_list in reac_group_dict.items():
                     if sheet.cell(next_row, 1).value is None: sheet.cell(next_row, 1, reac_group_name)
                     for j in range(5 + 2 * len(functional_list)): sheet.cell(next_row, j + 1).border = upper_border
                     for reac in reac_list:
@@ -190,7 +191,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
                                                  - sum(corrections[comp.name] * comp.amount for comp in reac.reactants if comp.name in corrections.keys())
                                                  + sum(corrections[comp.name] * comp.amount for comp in reac.products if comp.name in corrections.keys()))
 
-                        if sheet.cell(1, 3 + i + len(functional_list) + 2).value is None: sheet.cell(1, 2 + i + len(functional_list) + 2, func.name)
+                        if sheet.cell(1, 3 + i + len(functional_list) + 2).value is None: sheet.cell(1, 3 + i + len(functional_list) + 2, func.name)
                         sheet.cell(next_row, 3 + i + len(functional_list) + 2, func.calculate_reaction_enthalpy(reac)
                                                  - sum(corrections[comp.name] * comp.amount for comp in reac.reactants if comp.name in corrections.keys())
                                                  + sum(corrections[comp.name] * comp.amount for comp in reac.products if comp.name in corrections.keys())

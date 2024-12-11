@@ -41,6 +41,11 @@ def missing_structures(functional: Functional, needed_strcutures: dict):
         print()
 
 
+def sp(x):
+    print(x)
+    return x
+
+
 def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = False):
     pd_molecule_dat = build_pd(molecule_database_dir)
     pd_solid_dat = build_pd(solid_database_dir)
@@ -58,7 +63,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
         try: functional_list.append(Functional(functional_name=xc, slab_db=pd_solid_dat, adsorbate_db=None, mol_db=pd_molecule_dat, needed_struc_dict=need_structures, thermo_dynamic=True))
         except: pass
 
-    functional_list = sorted(functional_list, key=lambda x: prefered_functional_order.get(x.name) if x.name not in prefered_functional_order.keys() else 100)
+    functional_list = sorted(functional_list, key=lambda x: prefered_functional_order.get(x.name.lower()) if x.name.lower() not in prefered_functional_order.keys() else 100)
 
     if verbose:
         for i, func in enumerate(functional_list):

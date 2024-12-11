@@ -181,11 +181,12 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
                 correction_sheet_linalg.cell(start_of_linalg_data + j, 2 + i,  corrections[corr_key])
             for sheet, reac_group in ((correction_sheet_gas_linalg, all_gaseous_reactions), (correction_sheet_form_linalg, all_formation_reactions)):
                 for j, reac in enumerate(reac_group):
-                    if sheet.cell(1 + j, 1).value is None: sheet.cell(1 + j, 1, reac.products[0].name)
+                    if sheet.cell(2 + j, 1).value is None: sheet.cell(1 + j, 1, reac.products[0].name)
                     sheet.cell(2 + j, 2 + i, func.calculate_reaction_enthalpy(reac)
                                              - sum(corrections[comp.name] * comp.amount for comp in reac.reactants if comp.name in corrections.keys())
                                              + sum(corrections[comp.name] * comp.amount for comp in reac.products if comp.name in corrections.keys()))
 
+                    if sheet.cell(1, 2 + i + len(functional_list) + 2).value is None: sheet.cell(1, 2 + i + len(functional_list) + 2, func.name)
                     sheet.cell(2 + j, 2 + i + len(functional_list) + 2, func.calculate_reaction_enthalpy(reac)
                                              - sum(corrections[comp.name] * comp.amount for comp in reac.reactants if comp.name in corrections.keys())
                                              + sum(corrections[comp.name] * comp.amount for comp in reac.products if comp.name in corrections.keys())

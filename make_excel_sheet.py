@@ -52,10 +52,13 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
 
     need_structures = get_needed_structures(all_gaseous_reactions + all_formation_reactions)
 
+    prefered_functional_order = {'pbe': 1, 'pw91': 2, 'rpbe': 3, 'beef-vdw': 4, 'scan': 5, 'tpss': 6, 'hse06': 7, 'pbe0': 8}
     functional_list = []
     for xc in functional_set:
         try: functional_list.append(Functional(functional_name=xc, slab_db=pd_solid_dat, adsorbate_db=None, mol_db=pd_molecule_dat, needed_struc_dict=need_structures, thermo_dynamic=True))
         except: pass
+
+    functional_list = sorted(functional_list, key=lambda x: prefered_functional_order.get(x.name) if x.name not in prefered_functional_order.keys() else 100)
 
     if verbose:
         for i, func in enumerate(functional_list):
@@ -178,7 +181,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
             corrections, residual = lstsq_decomposition(func, all_formation_reactions, molecule_functional_dict)
             correction_sheet_linalg.cell(2, 2 + i, residual)
             for j, (group_name, corr_key) in enumerate(reac_group_names.items()):
-                if correction_sheet_linalg.cell(start_of_linalg_data + j, 1).value is None: correction_sheet_linalg.cell( start_of_linalg_data + j, 1, group_name)
+                if correction_sheet_linalg.cell(start_of_linalg_data + j, 1).value is None: correction_sheet_linalg.cell(start_of_linalg_data + j, 1, group_name)
                 correction_sheet_linalg.cell(start_of_linalg_data + j, 2 + i,  corrections[corr_key])
             for sheet, reac_group_dict in ((correction_sheet_gas_linalg, all_gaseous_reactions_named), (correction_sheet_form_linalg, all_formation_reactions_named)):
                 next_row = 2

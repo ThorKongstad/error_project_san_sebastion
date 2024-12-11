@@ -166,18 +166,49 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
         except: pass
 
     correction_sheet_linalg = excel_file.create_sheet('corrections linalg')
+    correction_sheet_gas_linalg = excel_file.create_sheet('corrected gas linalg')
+    correction_sheet_form_linalg = excel_file.create_sheet('corrected formation linalg')
     correction_sheet_linalg.cell(2, 1, 'residual')
     start_of_linalg_data = 5
 
     for i, func in enumerate(functional_list):
         try:
-            correction_sheet_linalg.cell(1, 2 + i, func.name)
+            for sheet in [correction_sheet_linalg,correction_sheet_gas_linalg,correction_sheet_form_linalg]: sheet.cell(1, 2 + i, func.name)
             corrections, residual = lstsq_decomposition(func, all_formation_reactions, molecule_functional_dict)
             correction_sheet_linalg.cell(2, 2 + i, residual)
             for j, (group_name, corr_key) in enumerate(reac_group_names.items()):
-                if correction_sheet_linalg.cell( start_of_linalg_data + j, 1).value is None: correction_sheet_linalg.cell( start_of_linalg_data + j, 1, group_name)
+                if correction_sheet_linalg.cell(start_of_linalg_data + j, 1).value is None: correction_sheet_linalg.cell( start_of_linalg_data + j, 1, group_name)
                 correction_sheet_linalg.cell(start_of_linalg_data + j, 2 + i,  corrections[corr_key])
+            for sheet, reac_group in ((correction_sheet_gas_linalg, all_gaseous_reactions), (correction_sheet_form_linalg, all_formation_reactions)):
+                for j, reac in enumerate(reac_group):
+                    if sheet.cell(1 + j, 1).value is None: sheet.cell(1 + j, 1, reac.products[0].name)
+                    sheet.cell(2 + j, 2 + i, func.calculate_reaction_enthalpy(reac)
+                                             - sum(corrections[comp.name] * comp.amount for comp in reac.reactants if comp.name in corrections.keys())
+                                             + sum(corrections[comp.name] * comp.amount for comp in reac.products if comp.name in corrections.keys()))
+
+                    sheet.cell(2 + j, 2 + i + len(functional_list) + 2, func.calculate_reaction_enthalpy(reac)
+                                             - sum(corrections[comp.name] * comp.amount for comp in reac.reactants if comp.name in corrections.keys())
+                                             + sum(corrections[comp.name] * comp.amount for comp in reac.products if comp.name in corrections.keys())
+                                             - reac.experimental_ref)
+                    if i == 0:
+                        sheet.cell(1, 2 + len(functional_list), 'exp ref')
+                        sheet.cell(2 + j, 2 + len(functional_list), reac.experimental_ref)
         except: pass
+
+    for sheet, reac_group in ((correction_sheet_gas_linalg, all_gaseous_reactions), (correction_sheet_form_linalg, all_formation_reactions)):
+        sheet.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(2 + len(functional_list) + 2)}${2}:${xl.utils.cell.get_column_letter(2 + 2*len(functional_list) + 2)}${len(reac_group)}'),
+                                       ColorScaleRule(start_type='formula',
+                                                      start_value=f'-MAX(-MIN({cond_zone}),MAX({cond_zone}))',
+                                                      start_color='AA0000',
+
+                                                      mid_type='num',
+                                                      mid_value=0,
+                                                      mid_color='FFFFFF',
+
+                                                      end_type='formula',
+                                                      end_value=f'MAX(-MIN({cond_zone}),MAX({cond_zone}))',
+                                                      end_color='AA0000'
+                                                      ))
 
 
     excel_file.save('reaction_results.xlsx')

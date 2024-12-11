@@ -179,21 +179,26 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
             for j, (group_name, corr_key) in enumerate(reac_group_names.items()):
                 if correction_sheet_linalg.cell(start_of_linalg_data + j, 1).value is None: correction_sheet_linalg.cell( start_of_linalg_data + j, 1, group_name)
                 correction_sheet_linalg.cell(start_of_linalg_data + j, 2 + i,  corrections[corr_key])
-            for sheet, reac_group in ((correction_sheet_gas_linalg, all_gaseous_reactions), (correction_sheet_form_linalg, all_formation_reactions)):
-                for j, reac in enumerate(reac_group):
-                    if sheet.cell(2 + j, 1).value is None: sheet.cell(1 + j, 1, reac.products[0].name)
-                    sheet.cell(2 + j, 2 + i, func.calculate_reaction_enthalpy(reac)
-                                             - sum(corrections[comp.name] * comp.amount for comp in reac.reactants if comp.name in corrections.keys())
-                                             + sum(corrections[comp.name] * comp.amount for comp in reac.products if comp.name in corrections.keys()))
+            for sheet, reac_group_dict in ((correction_sheet_gas_linalg, all_gaseous_reactions_named.items), (correction_sheet_form_linalg, all_formation_reactions_named.items)):
+                next_row = 2
+                for reac_group_name, reac_list in reac_group_dict.items:
+                    if sheet.cell(next_row, 1).value is None: sheet.cell(next_row, 1, reac_group_name)
+                    for j in range(5 + 2 * len(functional_list)): sheet.cell(next_row, j + 1).border = upper_border
+                    for reac in reac_list:
+                        if sheet.cell(next_row, 2).value is None: sheet.cell(next_row, 2, reac.products[0].name)
+                        sheet.cell(next_row, 3 + i, func.calculate_reaction_enthalpy(reac)
+                                                 - sum(corrections[comp.name] * comp.amount for comp in reac.reactants if comp.name in corrections.keys())
+                                                 + sum(corrections[comp.name] * comp.amount for comp in reac.products if comp.name in corrections.keys()))
 
-                    if sheet.cell(1, 2 + i + len(functional_list) + 2).value is None: sheet.cell(1, 2 + i + len(functional_list) + 2, func.name)
-                    sheet.cell(2 + j, 2 + i + len(functional_list) + 2, func.calculate_reaction_enthalpy(reac)
-                                             - sum(corrections[comp.name] * comp.amount for comp in reac.reactants if comp.name in corrections.keys())
-                                             + sum(corrections[comp.name] * comp.amount for comp in reac.products if comp.name in corrections.keys())
-                                             - reac.experimental_ref)
-                    if i == 0:
-                        sheet.cell(1, 2 + len(functional_list), 'exp ref')
-                        sheet.cell(2 + j, 2 + len(functional_list), reac.experimental_ref)
+                        if sheet.cell(1, 3 + i + len(functional_list) + 2).value is None: sheet.cell(1, 2 + i + len(functional_list) + 2, func.name)
+                        sheet.cell(next_row, 3 + i + len(functional_list) + 2, func.calculate_reaction_enthalpy(reac)
+                                                 - sum(corrections[comp.name] * comp.amount for comp in reac.reactants if comp.name in corrections.keys())
+                                                 + sum(corrections[comp.name] * comp.amount for comp in reac.products if comp.name in corrections.keys())
+                                                 - reac.experimental_ref)
+                        if i == 0:
+                            sheet.cell(1, 3 + len(functional_list), 'exp ref')
+                            sheet.cell(next_row, 3 + len(functional_list), reac.experimental_ref)
+                        next_row += 1
         except: pass
 
     for sheet, reac_group in ((correction_sheet_gas_linalg, all_gaseous_reactions), (correction_sheet_form_linalg, all_formation_reactions)):

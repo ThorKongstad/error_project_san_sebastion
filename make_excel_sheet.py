@@ -196,13 +196,13 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
                     for reac in reac_list:
                         if sheet.cell(next_row, 2).value is None: sheet.cell(next_row, 2, reac.products[0].name)
                         sheet.cell(next_row, 3 + i, func.calculate_reaction_enthalpy(reac)
-                                                 - sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.reactants if comp.name in molecule_functional_dict.keys())
-                                                 + sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.reactants if comp.name in molecule_functional_dict.keys()))
+                                                 + sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.reactants if comp.name in molecule_functional_dict.keys())
+                                                 - sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.products if comp.name in molecule_functional_dict.keys()))
 
                         if sheet.cell(1, 3 + i + len(functional_list) + 2).value is None: sheet.cell(1, 3 + i + len(functional_list) + 2, func.name)
                         sheet.cell(next_row, 3 + i + len(functional_list) + 2, func.calculate_reaction_enthalpy(reac)
-                                                 - sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.reactants if comp.name in molecule_functional_dict.keys())
-                                                 + sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.products if comp.name in molecule_functional_dict.keys())
+                                                 + sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.reactants if comp.name in molecule_functional_dict.keys())
+                                                 - sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.products if comp.name in molecule_functional_dict.keys())
                                                  - reac.experimental_ref)
                         if i == 0:
                             sheet.cell(1, 3 + len(functional_list), 'exp ref')

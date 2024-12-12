@@ -85,7 +85,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     deviation_sheet = excel_file.create_sheet('deviations')
     formation_sheet = excel_file.create_sheet('formation')
     formation_sheet_deviation = excel_file.create_sheet('formation_deviation')
-    correction_sheet = excel_file.create_sheet('corrections')
+    correction_sheet = excel_file.create_sheet('corrections simple')
 
     upper_border = Border(
         top=Side(border_style=BORDER_THIN, color='00000000'),
@@ -165,12 +165,36 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
 
     reac_group_names = {'Simple alkanes': 'methyl_carbons', 'Branched alkanes (iso)': 'iso_carbons', 'Branched alkanes (neo)': 'neo_carbons', 'Amines': 'amines', 'Nitros': 'nitro', 'Nitrates': 'nitrate', 'Nitrites': 'nitrite', 'Hydroxylamines': 'hydroxylamine', 'Aromatics': 'phenyl', 'Anilines': 'aniline', 'Hydrazines': 'hydrazine', 'Amides': 'amide', 'Nitriles': 'nitrile'}
 
+    correction_sheet_gas_simple = excel_file.create_sheet('corrected gas simple')
+    correction_sheet_form_simple = excel_file.create_sheet('corrected formation simple')
+
     for i, func in enumerate(functional_list):
         try:
             corrections = simple_decomposition(func, molecule_functional_dict)
-            for j, (group_name, val) in enumerate(corrections.items()):
+            for j, (group_name, corr_key) in enumerate(reac_group_names.items()):
                 if correction_sheet.cell(5 + j, 1).value is None: correction_sheet.cell(5 + j, 1, group_name)
-                correction_sheet.cell(5 + j, 2 + i, val)
+                correction_sheet.cell(5 + j, 2 + i, corrections[corr_key])
+            for sheet in [correction_sheet_gas_simple, correction_sheet_form_simple]: sheet.cell(1, 3 + i, func.name)
+            for sheet, reac_group_dict in ((correction_sheet_gas_simple, all_gaseous_reactions_named), (correction_sheet_form_simple, all_formation_reactions_named)):
+                next_row = 2
+                for reac_group_name, reac_list in reac_group_dict.items():
+                    if sheet.cell(next_row, 1).value is None: sheet.cell(next_row, 1, reac_group_name)
+                    for j in range(5 + 2 * len(functional_list)): sheet.cell(next_row, j + 1).border = upper_border
+                    for reac in reac_list:
+                        if sheet.cell(next_row, 2).value is None: sheet.cell(next_row, 2, reac.products[0].name)
+                        sheet.cell(next_row, 3 + i, func.calculate_reaction_enthalpy(reac)
+                                                 + sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.reactants if comp.name in molecule_functional_dict.keys())
+                                                 - sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.products if comp.name in molecule_functional_dict.keys()))
+
+                        if sheet.cell(1, 3 + i + len(functional_list) + 2).value is None: sheet.cell(1, 3 + i + len(functional_list) + 2, func.name)
+                        sheet.cell(next_row, 3 + i + len(functional_list) + 2, func.calculate_reaction_enthalpy(reac)
+                                                 + sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.reactants if comp.name in molecule_functional_dict.keys())
+                                                 - sum(sum(corrections[f_group] * f_amount for f_group, f_amount in molecule_functional_dict[comp.name].items() if f_group in corrections.keys()) * comp.amount for comp in reac.products if comp.name in molecule_functional_dict.keys())
+                                                 - reac.experimental_ref)
+                        if i == 0:
+                            sheet.cell(1, 3 + len(functional_list), 'exp ref')
+                            sheet.cell(next_row, 3 + len(functional_list), reac.experimental_ref)
+                        next_row += 1
         except: pass
 
     correction_sheet_linalg = excel_file.create_sheet('corrections linalg')
@@ -210,7 +234,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
                         next_row += 1
         except: pass
 
-    for sheet, reac_group in ((correction_sheet_gas_linalg, all_gaseous_reactions), (correction_sheet_form_linalg, all_formation_reactions)):
+    for sheet, reac_group in ((correction_sheet_gas_linalg, all_gaseous_reactions), (correction_sheet_gas_simple, all_gaseous_reactions), (correction_sheet_form_linalg, all_formation_reactions), (correction_sheet_form_simple, all_formation_reactions)):
         sheet.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(2 + len(functional_list) + 2)}${2}:${xl.utils.cell.get_column_letter(2 + 2*len(functional_list) + 2)}${len(reac_group)}'),
                                        ColorScaleRule(start_type='formula',
                                                       start_value=f'-MAX(-MIN({cond_zone}),MAX({cond_zone}))',

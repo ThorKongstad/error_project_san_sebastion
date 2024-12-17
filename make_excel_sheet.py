@@ -175,19 +175,20 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
 
     correction_sheet_gas_simple = excel_file.create_sheet('corrected gas simple')
     correction_sheet_form_simple = excel_file.create_sheet('corrected formation simple')
+    start_of_simple_corr = 8
 
     for i, func in enumerate(functional_list):
         try:
             corrections = simple_decomposition(func, molecule_functional_dict)
             for j, (group_name, corr_key) in enumerate(reac_group_names.items()):
-                if correction_sheet.cell(5 + j, 1).value is None: correction_sheet.cell(5 + j, 1, group_name)
-                correction_sheet.cell(5 + j, 2 + i, corrections[corr_key])
+                if correction_sheet.cell(start_of_simple_corr + j, 1).value is None: correction_sheet.cell(start_of_simple_corr + j, 1, group_name)
+                correction_sheet.cell(start_of_simple_corr + j, 2 + i, corrections[corr_key])
             for sheet in [correction_sheet_gas_simple, correction_sheet_form_simple]: sheet.cell(1, 3 + i, func.name)
             for sheet, reac_group_dict in ((correction_sheet_gas_simple, all_gaseous_reactions_named), (correction_sheet_form_simple, all_formation_reactions_named)):
                 next_row = 2
                 for reac_group_name, reac_list in reac_group_dict.items():
                     if sheet.cell(next_row, 1).value is None: sheet.cell(next_row, 1, reac_group_name)
-                    for j in range(5 + 2 * len(functional_list)): sheet.cell(next_row, j + 1).border = upper_border
+                    for j in range(start_of_simple_corr + 2 * len(functional_list)): sheet.cell(next_row, j + 1).border = upper_border
                     for reac in reac_list:
                         if sheet.cell(next_row, 2).value is None: sheet.cell(next_row, 2, reac.products[0].name)
                         sheet.cell(next_row, 3 + i, func.calculate_reaction_enthalpy(reac)

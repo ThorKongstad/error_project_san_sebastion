@@ -71,11 +71,15 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
 
     O2_er = dict()
     N2_er = dict()
+    NO_er = dict()
+    CO_er = dict()
 
     for func in copy(functional_list):
         try:
             O2_er.update({func.name: func.calc_O2_err()})
             N2_er.update({func.name: func.calc_N2_err()})
+            NO_er.update({func.name: func.calc_NO_err()})
+            CO_er.update({func.name: func.calc_CO_err()})
             func.correct_energies()
         except: functional_list.remove(func)
 
@@ -96,10 +100,14 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     for i, func in enumerate(functional_list):
         for sheet in (work_sheet, deviation_sheet, formation_sheet, formation_sheet_deviation): sheet.cell(1, i + start_of_data, func.name)
         correction_sheet.cell(1, i + start_of_data - 1, func.name)
-        correction_sheet.cell(2, i+2, O2_er[func.name])
-        correction_sheet.cell(3, i+2, N2_er[func.name])
+        correction_sheet.cell(2, i + 2, O2_er[func.name])
+        correction_sheet.cell(3, i + 2, N2_er[func.name])
+        correction_sheet.cell(4, i + 2, NO_er[func.name])
+        correction_sheet.cell(5, i + 2, CO_er[func.name])
     correction_sheet.cell(2, 1, 'O2 error')
     correction_sheet.cell(3, 1, 'N2 error')
+    correction_sheet.cell(4, 1, 'NO error')
+    correction_sheet.cell(5, 1, 'CO error')
 
     work_sheet.cell(1, len(functional_list) + start_of_data, 'exp ref')
     formation_sheet.cell(1, len(functional_list) + start_of_data, 'exp ref')

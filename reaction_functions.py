@@ -117,9 +117,24 @@ class Functional:
 
         return -2 * (self.calculate_reaction_enthalpy(water_reaction) - water_reaction.experimental_ref)
 
+    def calc_CO_err(self) -> float:
+    #        peroxide_reaction = reaction((('molecule', 'oxygen', 1), ('molecule', 'hydrogen', 1),), (('molecule', 'peroxide', 1),), -1.09)
+        co_reaction = reaction((('molecule', 'oxygen', 0.5), ('slab', 'graphene', 0.5),), (('molecule', 'carbon-monoxide', 1),), -1.15)
+
+        return -1 * (self.calculate_reaction_enthalpy(co_reaction) - co_reaction.experimental_ref)
+
+    def calc_NO_err(self) -> float:
+    #        peroxide_reaction = reaction((('molecule', 'oxygen', 1), ('molecule', 'hydrogen', 1),), (('molecule', 'peroxide', 1),), -1.09)
+        co_reaction = reaction((('molecule', 'oxygen', 0.5), ('molecule', 'nitrogen', 0.5),), (('molecule', 'nitric-oxide', 1),), 0.95)
+
+        return -1 * (self.calculate_reaction_enthalpy(co_reaction) - co_reaction.experimental_ref)
+
+
     def correct_energies(self):
         self.molecule['oxygen'] -= self.calc_O2_err()
         self.molecule['nitrogen'] -= self.calc_N2_err()
+        self.molecule['nitric-oxide'] -= self.calc_NO_err()
+        self.molecule['carbon-monoxide'] -= self.calc_CO_err()
 
 
 def get_needed_structures(reactions_seq: Sequence[reaction]):

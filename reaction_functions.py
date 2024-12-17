@@ -119,15 +119,18 @@ class Functional:
 
     def calc_CO_err(self) -> float:
     #        peroxide_reaction = reaction((('molecule', 'oxygen', 1), ('molecule', 'hydrogen', 1),), (('molecule', 'peroxide', 1),), -1.09)
+        O2_err = self.calc_O2_err()
         co_reaction = reaction((('molecule', 'oxygen', 0.5), ('slab', 'graphene', 0.5),), (('molecule', 'carbon-monoxide', 1),), -1.15)
 
-        return (self.calculate_reaction_enthalpy(co_reaction) - co_reaction.experimental_ref)
+        return (self.calculate_reaction_enthalpy(co_reaction) - co_reaction.experimental_ref + O2_err * 0.5)
 
     def calc_NO_err(self) -> float:
     #        peroxide_reaction = reaction((('molecule', 'oxygen', 1), ('molecule', 'hydrogen', 1),), (('molecule', 'peroxide', 1),), -1.09)
+        O2_err = self.calc_O2_err()
+        N2_err = self.calc_N2_err()
         co_reaction = reaction((('molecule', 'oxygen', 0.5), ('molecule', 'nitrogen', 0.5),), (('molecule', 'nitric-oxide', 1),), 0.95)
 
-        return (self.calculate_reaction_enthalpy(co_reaction) - co_reaction.experimental_ref)
+        return (self.calculate_reaction_enthalpy(co_reaction) - co_reaction.experimental_ref + O2_err * 0.5 + N2_err * 0.5)
 
 
     def correct_energies(self):

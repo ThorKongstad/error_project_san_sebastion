@@ -271,7 +271,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
 
     for sheet, reac_group in ((correction_sheet_gas_linalg, all_gaseous_reactions), (correction_sheet_gas_simple, all_gaseous_reactions), (correction_sheet_form_linalg, all_formation_reactions), (correction_sheet_form_simple, all_formation_reactions)):
 
-        for i in range(len(functional_list)):
+        for i, func in enumerate(functional_list):
             sheet.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(2 + len(functional_list) + 3 + i)}${2}:${xl.utils.cell.get_column_letter(2 + len(functional_list) + 3 + i)}${len(reac_group) + 1}'),
                                        ColorScaleRule(start_type='formula',
                                                       start_value=f'-MAX(-MIN({cond_zone}),MAX({cond_zone}))',

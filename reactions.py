@@ -124,10 +124,10 @@ aniline_formation: Tuple[reaction, ...] = (
 )
 
 hydrazine_formation: Tuple[reaction, ...] = (
-    reaction((('molecule', 'hydrogen', 2), ('molecule', 'nitrogen', 1)), (('molecule', 'hydrazine', 1),), 2.10),
-    reaction((('slab', 'graphene', 3), ('molecule', 'hydrogen', 4), ('molecule', 'nitrogen', 1)), (('molecule', 'phenylhydrazine', 1),), 0.96),
-    reaction((('slab', 'graphene', 1), ('molecule', 'hydrogen', 4), ('molecule', 'nitrogen', 1)), (('molecule', '1.2-dimethylhydrazine', 1),), 0.87),
-    reaction((('slab', 'graphene', 1), ('molecule', 'hydrogen', 4), ('molecule', 'nitrogen', 1)), (('molecule', '1.1-dimethylhydrazine', 1),), 0.99),
+    reaction((('molecule', 'hydrogen', 2), ('molecule', 'nitrogen', 1)), (('molecule', 'hydrazine', 1),), 0.99),
+    reaction((('slab', 'graphene', 3), ('molecule', 'hydrogen', 4), ('molecule', 'nitrogen', 1)), (('molecule', 'phenylhydrazine', 1),), 2.1),
+    reaction((('slab', 'graphene', 1), ('molecule', 'hydrogen', 4), ('molecule', 'nitrogen', 1)), (('molecule', '1.2-dimethylhydrazine', 1),), 0.96),
+    reaction((('slab', 'graphene', 1), ('molecule', 'hydrogen', 4), ('molecule', 'nitrogen', 1)), (('molecule', '1.1-dimethylhydrazine', 1),), 0.87),
 )
 
 amide_formation: Tuple[reaction, ...] = (
@@ -263,7 +263,7 @@ nitrite_gaseous: Tuple[reaction, ...] = (
 )
 
 hydroxylamine_gaseous: Tuple[reaction, ...] = (
-    reaction((('molecule', 'nitric-oxide', 1), ('molecule', 'water', 3 / 2)), (('molecule', 'hydroxylamine', 1), ('molecule', 'oxygen', 3 / 4)), 3.31),
+    reaction((('molecule', 'nitric-oxide', 1), ('molecule', 'water', 3 / 2)), (('molecule', 'hydroxylamine', 1), ('molecule', 'oxygen', 3 / 4)), 2.31),
     reaction((('molecule', 'carbon-monoxide', 4), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 11 / 2)), (('molecule', 'n.n-diethylhydroxylamine', 1), ('molecule', 'oxygen', 19 / 4)), 16.16),
     reaction((('molecule', 'carbon-monoxide', 1), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 5 / 2)), (('molecule', 'o-methylhydroxylamine', 1), ('molecule', 'oxygen', 7 / 4)), 6.21),
     reaction((('molecule', 'carbon-monoxide', 1), ('molecule', 'nitric-oxide', 1), ('molecule', 'water', 5 / 2)), (('molecule', 'n-methylhydroxylamine', 1), ('molecule', 'oxygen', 7 / 4)), 5.94),

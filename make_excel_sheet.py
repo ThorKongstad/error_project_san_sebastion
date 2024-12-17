@@ -117,18 +117,25 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     for name, reactions in all_gaseous_reactions_named.items():
         for sheet in [work_sheet, deviation_sheet]:
             sheet.cell(next_row, start_of_data - 2, name)
-            for j in range(len(functional_list)+start_of_data+1): sheet.cell(next_row, j + 1).border = upper_border
+            for j in range(len(functional_list)*2+start_of_data+3): sheet.cell(next_row, j + 1).border = upper_border
         for i, reac in enumerate(reactions):
             for sheet in [work_sheet, deviation_sheet]: sheet.cell(next_row, start_of_data - 1, reac.products[0].name)
             for j, func in enumerate(functional_list):
+                if sheet.cell(1, j + start_of_data).value is None: sheet.cell(next_row, 1, func.name)
+                if sheet.cell(1, j + start_of_data + len(functional_list) + 2).value is None: sheet.cell(next_row, 1, func.name)
                 try:
                     work_sheet.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac))
+                    work_sheet.cell(next_row, j + start_of_data + len(functional_list) + 2, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
+
                     deviation_sheet.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
+
                 except: pass
             work_sheet.cell(next_row, len(functional_list) + start_of_data, reac.experimental_ref)
             next_row += 1
 
-    deviation_sheet.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(start_of_data)}${start_of_data}:${xl.utils.cell.get_column_letter(j+start_of_data)}${next_row - 1}'),
+    #f'${xl.utils.cell.get_column_letter(start_of_data)}${start_of_data}:${xl.utils.cell.get_column_letter(j+start_of_data)}${next_row - 1}'
+    for i, func in enumerate(functional_list):
+        work_sheet.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(start_of_data + len(functional_list) + 2 + i)}${start_of_data}:${xl.utils.cell.get_column_letter(start_of_data + len(functional_list) + 2 + i)}${next_row - 1}'),
                                                ColorScaleRule(start_type='formula',
                                                               start_value=f'-MAX(-MIN({cond_zone}),MAX({cond_zone}))',
                                                               start_color='AA0000',
@@ -142,22 +149,32 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
                                                               end_color='AA0000'
                                                               ))
 
-    next_row = 2
+        if work_sheet.cell(1, i + start_of_data + len(functional_list) * 2 + 2).value is None: work_sheet.cell(next_row, 1, func.name)
+        if work_sheet.cell(2, start_of_data + len(functional_list) * 2 + 1).value is None: work_sheet.cell(next_row, 1, 'MAE')
+        if work_sheet.cell(3, start_of_data + len(functional_list) * 2 + 1).value is None: work_sheet.cell(next_row, 1, 'MAX')
+        work_sheet.cell(2, i + start_of_data + len(functional_list) * 2 + 2, f'=AVERAGE(ABS({cond_zone}))')
+        work_sheet.cell(3, i + start_of_data + len(functional_list) * 2 + 2, f'=MAX(ABS({cond_zone}))')
 
+    next_row = 2
     for name, reactions in all_formation_reactions_named.items():
         for sheet in [formation_sheet, formation_sheet_deviation]:
             sheet.cell(next_row, start_of_data - 2, name)
-            for j in range(len(functional_list)+start_of_data+1): sheet.cell(next_row, j + 1).border = upper_border
+            for j in range(len(functional_list)*2+start_of_data+3): sheet.cell(next_row, j + 1).border = upper_border
         for i, reac in enumerate(reactions):
             for sheet in [formation_sheet, formation_sheet_deviation]: sheet.cell(next_row, start_of_data - 1, reac.products[0].name)
             for j, func in enumerate(functional_list):
                 try:
                     formation_sheet.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac))
+                    formation_sheet.cell(next_row, j + start_of_data + len(functional_list) + 2, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
+
                     formation_sheet_deviation.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
+
                 except: pass
             formation_sheet.cell(next_row, len(functional_list) + start_of_data, reac.experimental_ref)
             next_row += 1
-    formation_sheet_deviation.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(start_of_data)}${start_of_data}:${xl.utils.cell.get_column_letter(j+start_of_data)}${next_row - 1}'),
+
+    for i in range(len(functional_list)):
+        formation_sheet.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(start_of_data + len(functional_list) + 2 + i)}${start_of_data}:${xl.utils.cell.get_column_letter(start_of_data + len(functional_list) + 2 + i)}${next_row - 1}'),
                                                ColorScaleRule(start_type='formula',
                                                               start_value=f'-MAX(-MIN({cond_zone}),MAX({cond_zone}))',
                                                               start_color='AA0000',
@@ -170,6 +187,12 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
                                                               end_value=f'MAX(-MIN({cond_zone}),MAX({cond_zone}))',
                                                               end_color='AA0000'
                                                               ))
+
+        if formation_sheet.cell(1, i + start_of_data + len(functional_list) * 2 + 2).value is None: formation_sheet.cell(next_row, 1, func.name)
+        if formation_sheet.cell(2, start_of_data + len(functional_list) * 2 + 1).value is None: formation_sheet.cell(next_row, 1, 'MAE')
+        if formation_sheet.cell(3, start_of_data + len(functional_list) * 2 + 1).value is None: formation_sheet.cell(next_row, 1, 'MAX')
+        formation_sheet.cell(2, i + start_of_data + len(functional_list) * 2 + 2, f'=AVERAGE(ABS({cond_zone}))')
+        formation_sheet.cell(3, i + start_of_data + len(functional_list) * 2 + 2, f'=MAX(ABS({cond_zone}))')
 
     reac_group_names = {'Simple alkanes': 'methyl_carbons', 'Branched alkanes (iso)': 'iso_carbons', 'Branched alkanes (neo)': 'neo_carbons', 'Amines': 'amines', 'Nitros': 'nitro', 'Nitrates': 'nitrate', 'Nitrites': 'nitrite', 'Hydroxylamines': 'hydroxylamine', 'Aromatics': 'phenyl', 'Anilines': 'aniline', 'Hydrazines': 'hydrazine', 'Amides': 'amide', 'Nitriles': 'nitrile'}
 
@@ -244,7 +267,9 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
         except: pass
 
     for sheet, reac_group in ((correction_sheet_gas_linalg, all_gaseous_reactions), (correction_sheet_gas_simple, all_gaseous_reactions), (correction_sheet_form_linalg, all_formation_reactions), (correction_sheet_form_simple, all_formation_reactions)):
-        sheet.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(2 + len(functional_list) + 2)}${2}:${xl.utils.cell.get_column_letter(2 + 2*len(functional_list) + 2)}${len(reac_group)}'),
+
+        for i in range(len(functional_list)):
+            sheet.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(2 + len(functional_list) + 3 + i)}${2}:${xl.utils.cell.get_column_letter(2 + len(functional_list) + 3 + i)}${len(reac_group)}'),
                                        ColorScaleRule(start_type='formula',
                                                       start_value=f'-MAX(-MIN({cond_zone}),MAX({cond_zone}))',
                                                       start_color='AA0000',
@@ -257,6 +282,12 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
                                                       end_value=f'MAX(-MIN({cond_zone}),MAX({cond_zone}))',
                                                       end_color='AA0000'
                                                       ))
+
+            if sheet.cell(1, i + start_of_data + len(functional_list) * 2 + 2).value is None: sheet.cell(next_row, 1, func.name)
+            if sheet.cell(2,start_of_data + len(functional_list) * 2 + 1).value is None: sheet.cell(next_row, 1, 'MAE')
+            if sheet.cell(3, start_of_data + len(functional_list) * 2 + 1).value is None: sheet.cell(next_row, 1, 'MAX')
+            sheet.cell(2, i + start_of_data + len(functional_list) * 2 + 2, f'=AVERAGE(ABS({cond_zone}))')
+            sheet.cell(3, i + start_of_data + len(functional_list) * 2 + 2, f'=MAX(ABS({cond_zone}))')
 
 
     excel_file.save('reaction_results.xlsx')

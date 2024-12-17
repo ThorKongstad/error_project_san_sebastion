@@ -86,9 +86,9 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     excel_file = xl.Workbook()
     work_sheet = excel_file.active
     work_sheet.title = 'energies'
-    deviation_sheet = excel_file.create_sheet('deviations')
+#    deviation_sheet = excel_file.create_sheet('deviations')
     formation_sheet = excel_file.create_sheet('formation')
-    formation_sheet_deviation = excel_file.create_sheet('formation_deviation')
+ #   formation_sheet_deviation = excel_file.create_sheet('formation_deviation')
     correction_sheet = excel_file.create_sheet('corrections simple')
 
     upper_border = Border(
@@ -98,7 +98,7 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     start_of_data = 3
 
     for i, func in enumerate(functional_list):
-        for sheet in (work_sheet, deviation_sheet, formation_sheet, formation_sheet_deviation): sheet.cell(1, i + start_of_data, func.name)
+        for sheet in (work_sheet, formation_sheet): sheet.cell(1, i + start_of_data, func.name)
         correction_sheet.cell(1, i + start_of_data - 1, func.name)
         correction_sheet.cell(2, i + 2, O2_er[func.name])
         correction_sheet.cell(3, i + 2, N2_er[func.name])
@@ -115,19 +115,19 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
     next_row = 2
 
     for name, reactions in all_gaseous_reactions_named.items():
-        for sheet in [work_sheet, deviation_sheet]:
+        for sheet in [work_sheet,]:
             sheet.cell(next_row, start_of_data - 2, name)
             for j in range(len(functional_list)*2+start_of_data+3): sheet.cell(next_row, j + 1).border = upper_border
         for i, reac in enumerate(reactions):
-            for sheet in [work_sheet, deviation_sheet]: sheet.cell(next_row, start_of_data - 1, reac.products[0].name)
+            for sheet in [work_sheet,]: sheet.cell(next_row, start_of_data - 1, reac.products[0].name)
             for j, func in enumerate(functional_list):
-                if sheet.cell(1, j + start_of_data).value is None: sheet.cell(1, j + start_of_data, func.name)
-                if sheet.cell(1, j + start_of_data + len(functional_list) + 2).value is None: sheet.cell(1, j + start_of_data + len(functional_list) + 2, func.name)
+                if work_sheet.cell(1, j + start_of_data).value is None: work_sheet.cell(1, j + start_of_data, func.name)
+                if work_sheet.cell(1, j + start_of_data + len(functional_list) + 2).value is None: work_sheet.cell(1, j + start_of_data + len(functional_list) + 2, func.name)
                 try:
                     work_sheet.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac))
                     work_sheet.cell(next_row, j + start_of_data + len(functional_list) + 2, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
 
-                    deviation_sheet.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
+#                    deviation_sheet.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
 
                 except: pass
             work_sheet.cell(next_row, len(functional_list) + start_of_data, reac.experimental_ref)
@@ -157,23 +157,24 @@ def main(molecule_database_dir: str, solid_database_dir: str, verbose: bool = Fa
 
     next_row = 2
     for name, reactions in all_formation_reactions_named.items():
-        for sheet in [formation_sheet, formation_sheet_deviation]:
+        for sheet in [formation_sheet,]:
             sheet.cell(next_row, start_of_data - 2, name)
             for j in range(len(functional_list)*2+start_of_data+3): sheet.cell(next_row, j + 1).border = upper_border
         for i, reac in enumerate(reactions):
-            for sheet in [formation_sheet, formation_sheet_deviation]: sheet.cell(next_row, start_of_data - 1, reac.products[0].name)
+            for sheet in [formation_sheet,]: sheet.cell(next_row, start_of_data - 1, reac.products[0].name)
             for j, func in enumerate(functional_list):
+                if formation_sheet.cell(1, j + start_of_data + len(functional_list) + 2).value is None: formation_sheet.cell(1, j + start_of_data + len(functional_list) + 2, func.name)
                 try:
                     formation_sheet.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac))
                     formation_sheet.cell(next_row, j + start_of_data + len(functional_list) + 2, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
 
-                    formation_sheet_deviation.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
+#                    formation_sheet_deviation.cell(next_row, j + start_of_data, func.calculate_reaction_enthalpy(reac) - reac.experimental_ref)
 
                 except: pass
             formation_sheet.cell(next_row, len(functional_list) + start_of_data, reac.experimental_ref)
             next_row += 1
 
-    for i in range(len(functional_list)):
+    for i, func in enumerate(functional_list):
         formation_sheet.conditional_formatting.add((cond_zone := f'${xl.utils.cell.get_column_letter(start_of_data + len(functional_list) + 2 + i)}${2}:${xl.utils.cell.get_column_letter(start_of_data + len(functional_list) + 2 + i)}${next_row - 1}'),
                                                ColorScaleRule(start_type='formula',
                                                               start_value=f'-MAX(-MIN({cond_zone}),MAX({cond_zone}))',

@@ -38,4 +38,4 @@ if __name__ == '__main__':
 #    parser.add_argument('not_pattern')
     args = parser.parse_args()
 
-    main(args.data_base_id, args.database)
+    main(args.database, args.pattern)

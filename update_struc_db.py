@@ -17,9 +17,29 @@ def main(db_index: int, txt_dir: str, db_dir: str, relaxed: bool = False, new_co
             functional = row.get('xc')
             old_atoms = row.toatoms()
             name = row.get('name')
+            data = row.get('data')
     if not new_constraint and not unsafe:
         constraints = old_atoms.constraints
-    if os.path.basename(txt_dir) == 'OUTCAR': updated_atoms: Atoms = read(txt_dir, index=-1, format='vasp-out')
+    if os.path.basename(txt_dir) == 'OUTCAR':
+        from ase.calculators.vasp import Vasp
+        updated_atoms: Atoms = read(txt_dir, index=-1, format='vasp-out')
+        updated_atoms.calc = Vasp()
+        freq, ifreq = updated_atoms.calc.read_vib_freq()
+        zpe = sum(freq) / 1000
+        if len(freq) > 0:
+            data.update(dict(frequencies=freq, i_frequencies=ifreq))
+            update_db(db_dir,
+                      dict(
+                          id=db_index,
+                          atoms=updated_atoms,
+                          relaxed=relaxed,
+                          zpe=zpe,
+                          vibration=True,
+                          vib_en=False,
+                          data=data
+                      ))
+            return
+
     elif os.path.basename(txt_dir) == 'CONTCAR': updated_atoms: Atoms = read(txt_dir, format='vasp')
     else: updated_atoms: Atoms = read(txt_dir, index=-1)
     if not new_constraint and not unsafe: updated_atoms.set_constraint(constraints)
